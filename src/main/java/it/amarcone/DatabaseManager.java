@@ -48,7 +48,6 @@ public class DatabaseManager {
             String url = "jdbc:mysql://" + getName() + "?serverTimezone=" + TimeZone.getDefault().getID();
 
             connection = DriverManager.getConnection(url, getUser(), getPassword());
-            System.out.println("Connessione al database riuscita");
         } catch (Exception e) {
             System.out.println("Connessione al database fallita");
         }
@@ -108,6 +107,23 @@ public class DatabaseManager {
         setPassword(password);
     }
 
+    public int countOpereInDateRange(String username, String dataMin, String dataMax) {
+        try{
+            PreparedStatement stmt = connection.prepareStatement("SELECT COUNT(operaId) as visualizzazioni FROM recensione WHERE profiloId = ? AND data >= ? AND data <= ?");
+            stmt.setString(1,username);
+            stmt.setString(2,dataMin);
+            stmt.setString(3,dataMax);
+            ResultSet result = stmt.executeQuery();
+            if (result.next()) {
+                return result.getInt("visualizzazioni");
+            }
+        } catch (SQLException e) {
+            System.out.println("Esecuzione query fallita");
+            return -1;
+        }
+        return -1;
+    }
+
     public int countFollowers(String username) {
         try {
             PreparedStatement stmt = connection.prepareStatement("SELECT COUNT(profiloSeguito) AS followers FROM seguire WHERE profiloSeguito = ?");
@@ -117,10 +133,9 @@ public class DatabaseManager {
                 return result.getInt("followers");
             }
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            System.out.println("Esecuzione query fallita");
             return -1;
-        }//1 specifies the first parameter in the query
+        }
         return -1;
     }
 
