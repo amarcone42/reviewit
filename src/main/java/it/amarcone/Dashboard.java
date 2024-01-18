@@ -33,16 +33,60 @@ public class Dashboard extends JFrame {
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.setForeground(getForeground());
 
+        tabbedPane.addTab("OP8", operazione08());
+
         tabbedPane.addTab("OP9", operazione09());
-        //tabbedPane.setMnemonicAt(9, KeyEvent.VK_9);
 
         tabbedPane.addTab("OP11", operazione11());
-        //tabbedPane.setMnemonicAt(11, KeyEvent.VK_1);
 
         page.add(tabbedPane);
 
         setContentPane(page);
         setVisible(true);
+    }
+
+    public JPanel operazione08() {
+        JPanel panel = new JPanel();
+
+        JLabel label_username = new JLabel("Username");
+        JTextField field_username = new JTextField(10);
+
+        JLabel label_dataMin = new JLabel("Data inizio");
+        JXDatePicker pickerDataMin = new JXDatePicker ();
+        pickerDataMin.setDate (Calendar.getInstance ().getTime ());
+        pickerDataMin.setFormats (new SimpleDateFormat ("dd/MM/yyyy"));
+
+        JLabel label_dataMax = new JLabel("Data fine");
+        JXDatePicker pickerDataMax = new JXDatePicker ();
+        pickerDataMax.setDate (Calendar.getInstance ().getTime ());
+        pickerDataMax.setFormats (new SimpleDateFormat ("dd/MM/yyyy"));
+    
+        JButton submit = new JButton("Calcola");
+        submit.addActionListener(e -> {
+            SimpleDateFormat desiredFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String dataMin = desiredFormat.format(pickerDataMin.getDate());
+            String dataMax = desiredFormat.format(pickerDataMax.getDate());
+
+            if (field_username.getText().equals("")) {
+                System.out.println("Campo vuoto");
+            } else {
+                database.createConnection();
+                System.out.println("Opere viste dal "+ dataMin + " al " + dataMax + ": ");
+                database.viewOpereInDateRange(field_username.getText(), dataMin, dataMax);
+                database.closeConnection();
+            }
+        });
+        panel.add(label_username);
+        panel.add(field_username);
+
+        panel.add(label_dataMin);
+        panel.add(pickerDataMin);
+
+        panel.add(label_dataMax);
+        panel.add(pickerDataMax);
+
+        panel.add(submit);
+        return panel;
     }
 
     public JPanel operazione09() {

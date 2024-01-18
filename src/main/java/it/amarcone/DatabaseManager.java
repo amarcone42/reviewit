@@ -107,6 +107,31 @@ public class DatabaseManager {
         setPassword(password);
     }
 
+
+
+    public void viewOpereInDateRange(String username, String dataMin, String dataMax) {
+        try{
+            PreparedStatement stmt = connection.prepareStatement("SELECT o.* FROM opera o JOIN recensione ON o.id = operaId WHERE profiloId = ? AND data > ? AND data < ?");
+            stmt.setString(1,username);
+            stmt.setString(2,dataMin);
+            stmt.setString(3,dataMax);
+            ResultSet result = stmt.executeQuery();
+            while(result.next()){
+                System.out.println("id: " + result.getInt("id"));
+                System.out.println("tipo: " + result.getInt("tipo"));
+                System.out.println("durata: " + result.getTime("durata"));
+                System.out.println("titolo: " + result.getString("titolo"));
+                System.out.println("descrizione: " + result.getString("descrizione"));
+                System.out.println("locandina: " + result.getString("locandina"));
+                System.out.println("data di uscita: " + result.getDate("dataDiUscita"));
+                System.out.println("classificazione: " + result.getString("classificazione"));
+                System.out.println("voto medio: " + result.getFloat("votoMedio") + "\n");
+            }
+        }catch (SQLException e) {
+            System.out.println("Esecuzione query fallita");
+        }
+    }
+
     public int countOpereInDateRange(String username, String dataMin, String dataMax) {
         try{
             PreparedStatement stmt = connection.prepareStatement("SELECT COUNT(operaId) as visualizzazioni FROM recensione WHERE profiloId = ? AND data >= ? AND data <= ?");
