@@ -1,5 +1,5 @@
 ### Database credenials
-src/main/resources/sbcredentials.txt
+src/main/resources/dbcredentials.txt
 
 ### Maven
 target/
