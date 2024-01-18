@@ -1,3 +1,6 @@
+### Database credenials
+src/main/resources/sbcredentials.txt
+
 ### Maven
 target/
 pom.xml.tag
