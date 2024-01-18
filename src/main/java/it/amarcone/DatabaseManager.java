@@ -6,6 +6,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.TimeZone;
@@ -41,7 +43,7 @@ public class DatabaseManager {
     }
 
 
-    public void createConnection() throws SQLException {
+    public void createConnection() {
         try {
             String url = "jdbc:mysql://" + getName() + "?serverTimezone=" + TimeZone.getDefault().getID();
 
@@ -49,6 +51,13 @@ public class DatabaseManager {
             System.out.println("Connessione al database riuscita");
         } catch (Exception e) {
             System.out.println("Connessione al database fallita");
+        }
+    }
+    public void closeConnection() {
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            System.out.println("Errore chiusura connessione");
         }
     }
     public Statement createStatement() throws SQLException {
@@ -97,6 +106,22 @@ public class DatabaseManager {
         setName(dbname);
         setUser(user);
         setPassword(password);
+    }
+
+    public int countFollowers(String username) {
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT COUNT(profiloSeguito) AS followers FROM seguire WHERE profiloSeguito = ?");
+            stmt.setString(1,username);
+            ResultSet result = stmt.executeQuery();
+            if (result.next()) {
+                return result.getInt("followers");
+            }
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return -1;
+        }//1 specifies the first parameter in the query
+        return -1;
     }
 
 }
