@@ -3,7 +3,9 @@ package it.amarcone;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -64,7 +66,13 @@ public class DatabaseManager {
     }
 
     public void saveCredentials() {
-        // TODO save credential in a savefile
+        try ( PrintWriter writer = new PrintWriter(new FileWriter("src/main/resources/dbcredentials.txt")) ){
+            writer.println(getName());
+            writer.println(getUser());
+            writer.println(getPassword());
+        } catch (IOException e) {
+            System.out.println("Errore nel salvataggio delle credenziali");
+        }
     }
     public void loadCredentials() {
         String savedname = null;
