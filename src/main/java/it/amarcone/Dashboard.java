@@ -1,36 +1,48 @@
 package it.amarcone;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import org.jdesktop.swingx.JXDatePicker;
+import org.jdesktop.swingx.painter.AbstractLayoutPainter.VerticalAlignment;
 
 public class Dashboard extends JFrame {
     DatabaseManager database;
     JPanel page;
+    JTextArea console;
     
     public Dashboard() {
         super("Reviewit");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationByPlatform(true);
-        setSize(720, 500);
+        setSize(1000, 600);
         setResizable(true);
-        setMinimumSize(new Dimension(600, 600));
+        setMinimumSize(new Dimension(1000, 600));
 
         database = new DatabaseManager();
 
         page = new JPanel();
+        page.setLayout(new BoxLayout(page,BoxLayout.X_AXIS));
 
-        JTabbedPane tabbedPane = new JTabbedPane();
+        //Fake console to show query output
+        console = new JTextArea(25,50);
+        console.setEditable(false);
+        JScrollPane scrollableTextArea = new JScrollPane(console);
+
+        JTabbedPane tabbedPane = new JTabbedPane(1);
         tabbedPane.setForeground(getForeground());
 
         tabbedPane.addTab("OP6", operazione06());
@@ -40,6 +52,8 @@ public class Dashboard extends JFrame {
         tabbedPane.addTab("OP11", operazione11());
 
         page.add(tabbedPane);
+        
+        page.add(scrollableTextArea);
 
         setContentPane(page);
         setVisible(true);
@@ -61,14 +75,15 @@ public class Dashboard extends JFrame {
             String result;
 
             if (field_nome.getText().equals("") || field_cognome.getText().equals("")) {
-                System.out.println("Campo vuoto");
+                result = "Campo vuoto";
             } else {
                 database.createConnection();
                 result = database.viewOperaByLavoratore(field_nome.getText(), field_cognome.getText());
                 database.closeConnection();
                 System.out.println("Opere del lavoratore " + field_nome.getText() +" " + field_cognome.getText() + ":");
-                System.out.println(result);
             }
+            System.out.println(result);
+            console.setText(result);
         });
         panel.add(label_titolo);
 
@@ -93,14 +108,15 @@ public class Dashboard extends JFrame {
             String result;
 
             if (field_username.getText().equals("")) {
-                System.out.println("Campo vuoto");
+                result = "Campo vuoto";
             } else {
                 database.createConnection();
                 result = database.viewNotizieByUtente(field_username.getText());
                 database.closeConnection();
                 System.out.println("Notizie dell'utente " + field_username.getText() + ":");
-                System.out.println(result);
             }
+            System.out.println(result);
+            console.setText(result);
         });
         panel.add(label_username);
         panel.add(field_username);
@@ -134,14 +150,15 @@ public class Dashboard extends JFrame {
             String result;
 
             if (field_username.getText().equals("")) {
-                System.out.println("Campo vuoto");
+                result = "Campo vuoto";
             } else {
                 database.createConnection();
-                System.out.println("Opere viste dal "+ dataMin + " al " + dataMax + ": ");
                 result = database.viewOpereInDateRange(field_username.getText(), dataMin, dataMax);
                 database.closeConnection();
-                System.out.println(result);
+                System.out.println("Opere viste dal "+ dataMin + " al " + dataMax + ": ");
             }
+            System.out.println(result);
+            console.setText(result);
         });
         panel.add(label_username);
         panel.add(field_username);
@@ -178,13 +195,23 @@ public class Dashboard extends JFrame {
             String dataMin = desiredFormat.format(pickerDataMin.getDate());
             String dataMax = desiredFormat.format(pickerDataMax.getDate());
 
+            String result;
+            int resultNumber = 0;
             if (field_username.getText().equals("")) {
-                System.out.println("Campo vuoto");
+                result = "Campo vuoto";
             } else {
                 database.createConnection();
-                System.out.println("Opere viste dal "+ dataMin + " al " + dataMax + ": " + database.countOpereInDateRange(field_username.getText(), dataMin, dataMax));
+                resultNumber = database.countOpereInDateRange(field_username.getText(), dataMin, dataMax);
                 database.closeConnection();
+                //System.out.println("Opere viste dal "+ dataMin + " al " + dataMax + ": ");
+                if (resultNumber >=0) {
+                    result = "L'utente ha visto " + resultNumber + " opere";
+                } else {
+                    result = "Errore query";
+                }
             }
+            System.out.println(result);
+            console.setText(result);
         });
         panel.add(label_username);
         panel.add(field_username);
@@ -207,14 +234,22 @@ public class Dashboard extends JFrame {
 
         JButton submit = new JButton("Calcola");
         submit.addActionListener(e -> {
+            String result;
+            int resultNumber = 0;
             if (field_username.getText().equals("")) {
-                System.out.println("Campo vuoto");
+                result = "Campo vuoto";
             } else {
                 database.createConnection();
-                System.out.println("followers:" + database.countFollowers(field_username.getText()));
+                resultNumber = database.countFollowers(field_username.getText());
                 database.closeConnection();
+                if (resultNumber >=0) {
+                    result = "L'utente ha " + resultNumber + " follower";
+                } else {
+                    result = "Errore query";
+                }
             }
-            
+            System.out.println(result);
+            console.setText(result);
         });
         panel.add(label_username);
         panel.add(field_username);
