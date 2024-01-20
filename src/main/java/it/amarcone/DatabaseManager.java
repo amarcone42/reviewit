@@ -115,7 +115,34 @@ public class DatabaseManager {
         setPassword(password);
     }
 
+    private String checkResult(String result) {
+        if (result.equals("")) {
+            result = "Nessun risultato trovato";
+        }
+        return result;
+    }
+    
 
+
+    public String viewNotizieByUtente(String username) {
+        String resultString = "";
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM notizia WHERE profiloId = ?");
+            stmt.setString(1,username);
+            ResultSet result = stmt.executeQuery();
+            while (result.next()) {
+                resultString = resultString.concat("profiloId: " + result.getString("profiloId") + "\n");
+                resultString = resultString.concat("data: " + result.getDate("data") + "\n");
+                resultString = resultString.concat("ora: " + result.getTime("ora") + "\n");
+                resultString = resultString.concat("titolo: " + result.getString("titolo") + "\n");
+                resultString = resultString.concat("anteprima: " + result.getString("anteprima") + "\n");
+                resultString = resultString.concat("contenuto: " + result.getString("contenuto") + "\n\n");
+            }
+        } catch (SQLException e) {
+            resultString = "Esecuzione query fallita";
+        }
+        return checkResult(resultString);   
+    }
 
     public String viewOpereInDateRange(String username, String dataMin, String dataMax) {
         String resultString = "";
@@ -137,9 +164,9 @@ public class DatabaseManager {
                 resultString = resultString.concat("voto medio: " + result.getFloat("votoMedio") + "\n\n");
             }
         }catch (SQLException e) {
-            System.out.println("Esecuzione query fallita");
+            resultString = "Esecuzione query fallita";
         }
-        return resultString;
+        return checkResult(resultString);
     }
 
     public int countOpereInDateRange(String username, String dataMin, String dataMax) {

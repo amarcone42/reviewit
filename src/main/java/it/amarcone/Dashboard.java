@@ -33,16 +33,42 @@ public class Dashboard extends JFrame {
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.setForeground(getForeground());
 
+        tabbedPane.addTab("OP7", operazione07());
         tabbedPane.addTab("OP8", operazione08());
-
         tabbedPane.addTab("OP9", operazione09());
-
         tabbedPane.addTab("OP11", operazione11());
 
         page.add(tabbedPane);
 
         setContentPane(page);
         setVisible(true);
+    }
+
+    public JPanel operazione07() {
+        JPanel panel = new JPanel();
+
+        JLabel label_username = new JLabel("Username");
+        JTextField field_username = new JTextField(10);
+
+        JButton submit = new JButton("Calcola");
+        submit.addActionListener(e -> {
+            String result;
+
+            if (field_username.getText().equals("")) {
+                System.out.println("Campo vuoto");
+            } else {
+                database.createConnection();
+                result = database.viewNotizieByUtente(field_username.getText());
+                database.closeConnection();
+                System.out.println("Notizie dell'utente " + field_username.getText() + ":");
+                System.out.println(result);
+            }
+        });
+        panel.add(label_username);
+        panel.add(field_username);
+
+        panel.add(submit);
+        return panel;
     }
 
     public JPanel operazione08() {
