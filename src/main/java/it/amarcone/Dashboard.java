@@ -33,6 +33,7 @@ public class Dashboard extends JFrame {
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.setForeground(getForeground());
 
+        tabbedPane.addTab("OP6", operazione06());
         tabbedPane.addTab("OP7", operazione07());
         tabbedPane.addTab("OP8", operazione08());
         tabbedPane.addTab("OP9", operazione09());
@@ -44,13 +45,50 @@ public class Dashboard extends JFrame {
         setVisible(true);
     }
 
+    public JPanel operazione06(){
+        JPanel panel = new JPanel();
+
+        JLabel label_titolo = new JLabel("Recuperare tutte le opere a cui ha partecipato un lavoratore");
+
+        JLabel label_nome = new JLabel("Nome");
+        JTextField field_nome = new JTextField(10);
+
+        JLabel label_cognome = new JLabel("Cognome");
+        JTextField field_cognome = new JTextField(10);
+
+        JButton submit = new JButton("Cerca");
+        submit.addActionListener(e -> {
+            String result;
+
+            if (field_nome.getText().equals("") || field_cognome.getText().equals("")) {
+                System.out.println("Campo vuoto");
+            } else {
+                database.createConnection();
+                result = database.viewOperaByLavoratore(field_nome.getText(), field_cognome.getText());
+                database.closeConnection();
+                System.out.println("Opere del lavoratore " + field_nome.getText() +" " + field_cognome.getText() + ":");
+                System.out.println(result);
+            }
+        });
+        panel.add(label_titolo);
+
+        panel.add(label_nome);
+        panel.add(field_nome);
+
+        panel.add(label_cognome);
+        panel.add(field_cognome);
+
+        panel.add(submit);
+        return panel;
+    }
+
     public JPanel operazione07() {
         JPanel panel = new JPanel();
 
         JLabel label_username = new JLabel("Username");
         JTextField field_username = new JTextField(10);
 
-        JButton submit = new JButton("Calcola");
+        JButton submit = new JButton("Cerca");
         submit.addActionListener(e -> {
             String result;
 
@@ -87,7 +125,7 @@ public class Dashboard extends JFrame {
         pickerDataMax.setDate (Calendar.getInstance ().getTime ());
         pickerDataMax.setFormats (new SimpleDateFormat ("dd/MM/yyyy"));
     
-        JButton submit = new JButton("Calcola");
+        JButton submit = new JButton("Cerca");
         submit.addActionListener(e -> {
             SimpleDateFormat desiredFormat = new SimpleDateFormat("yyyy-MM-dd");
             String dataMin = desiredFormat.format(pickerDataMin.getDate());

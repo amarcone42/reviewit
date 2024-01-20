@@ -123,7 +123,35 @@ public class DatabaseManager {
     }
     
 
+    public String viewOperaByLavoratore(String nome, String cognome) {
+        String resultString = "";
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT o.* FROM opera o WHERE " +
+            "o.id IN (SELECT operaId FROM partecipazione p INNER JOIN lavoratore l ON p.membroCrewId = l.id WHERE l.nome = ? AND l.cognome = ?) or " + 
+            "o.id IN (SELECT operaId FROM recitazione r INNER JOIN lavoratore l ON r.attoreId = l.id WHERE l.nome = ? AND l.cognome = ?)");
+            stmt.setString(1,nome);
+            stmt.setString(2,cognome);
+            stmt.setString(3,nome);
+            stmt.setString(4,cognome);
+            ResultSet result = stmt.executeQuery();
+            while (result.next()) {
+                resultString = resultString.concat("id: " + result.getString("id") + "\n");
+                resultString = resultString.concat("tipo: " + result.getInt("tipo") + "\n");
+                resultString = resultString.concat("durata: " + result.getTime("durata") + "\n");
+                resultString = resultString.concat("titolo: " + result.getString("titolo") + "\n");
+                resultString = resultString.concat("descrizione: " + result.getString("descrizione") + "\n");
+                resultString = resultString.concat("locandina: " + result.getString("locandina") + "\n");
+                resultString = resultString.concat("data di uscita: " + result.getDate("dataDiUscita") + "\n");
+                resultString = resultString.concat("classificazione: " + result.getString("classificazione") + "\n");
+                resultString = resultString.concat("voto medio: " + result.getFloat("votoMedio") + "\n\n");
+            }
+        } catch (SQLException e) {
+            resultString = "Esecuzione query fallita";
+        }
+        return checkResult(resultString);   
+    }
 
+    
     public String viewNotizieByUtente(String username) {
         String resultString = "";
         try {
