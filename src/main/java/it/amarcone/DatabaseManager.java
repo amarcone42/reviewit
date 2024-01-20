@@ -117,7 +117,8 @@ public class DatabaseManager {
 
 
 
-    public void viewOpereInDateRange(String username, String dataMin, String dataMax) {
+    public String viewOpereInDateRange(String username, String dataMin, String dataMax) {
+        String resultString = "";
         try{
             PreparedStatement stmt = connection.prepareStatement("SELECT o.* FROM opera o JOIN recensione ON o.id = operaId WHERE profiloId = ? AND data > ? AND data < ?");
             stmt.setString(1,username);
@@ -125,19 +126,20 @@ public class DatabaseManager {
             stmt.setString(3,dataMax);
             ResultSet result = stmt.executeQuery();
             while(result.next()){
-                System.out.println("id: " + result.getInt("id"));
-                System.out.println("tipo: " + result.getInt("tipo"));
-                System.out.println("durata: " + result.getTime("durata"));
-                System.out.println("titolo: " + result.getString("titolo"));
-                System.out.println("descrizione: " + result.getString("descrizione"));
-                System.out.println("locandina: " + result.getString("locandina"));
-                System.out.println("data di uscita: " + result.getDate("dataDiUscita"));
-                System.out.println("classificazione: " + result.getString("classificazione"));
-                System.out.println("voto medio: " + result.getFloat("votoMedio") + "\n");
+                resultString = resultString.concat("id: " + result.getInt("id") + "\n");
+                resultString = resultString.concat("tipo: " + result.getInt("tipo") + "\n");
+                resultString = resultString.concat("durata: " + result.getTime("durata") + "\n");
+                resultString = resultString.concat("titolo: " + result.getString("titolo") + "\n");
+                resultString = resultString.concat("descrizione: " + result.getString("descrizione") + "\n");
+                resultString = resultString.concat("locandina: " + result.getString("locandina") + "\n");
+                resultString = resultString.concat("data di uscita: " + result.getDate("dataDiUscita") + "\n");
+                resultString = resultString.concat("classificazione: " + result.getString("classificazione") + "\n");
+                resultString = resultString.concat("voto medio: " + result.getFloat("votoMedio") + "\n\n");
             }
         }catch (SQLException e) {
             System.out.println("Esecuzione query fallita");
         }
+        return resultString;
     }
 
     public int countOpereInDateRange(String username, String dataMin, String dataMax) {

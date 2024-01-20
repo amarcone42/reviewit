@@ -67,13 +67,16 @@ public class Dashboard extends JFrame {
             String dataMin = desiredFormat.format(pickerDataMin.getDate());
             String dataMax = desiredFormat.format(pickerDataMax.getDate());
 
+            String result;
+
             if (field_username.getText().equals("")) {
                 System.out.println("Campo vuoto");
             } else {
                 database.createConnection();
                 System.out.println("Opere viste dal "+ dataMin + " al " + dataMax + ": ");
-                database.viewOpereInDateRange(field_username.getText(), dataMin, dataMax);
+                result = database.viewOpereInDateRange(field_username.getText(), dataMin, dataMax);
                 database.closeConnection();
+                System.out.println(result);
             }
         });
         panel.add(label_username);
