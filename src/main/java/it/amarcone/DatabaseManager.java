@@ -121,6 +121,34 @@ public class DatabaseManager {
         }
         return result;
     }
+
+    public String viewOperefromListaViewed(String username, int listaId, boolean viewed) {
+        String resultString = "";
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM opera WHERE "+
+                    "id IN ( SELECT operaId FROM collezione WHERE listaId = ?) or "+
+                    "id IN ( SELECT operaId FROM classificazione WHERE listaId = ?) AND "+
+                    "id "+ (viewed?"":"NOT") + " IN (SELECT operaId FROM recensione WHERE profiloId = ?)");
+            stmt.setInt(1,listaId);
+            stmt.setInt(2,listaId);
+            stmt.setString(3,username);
+            ResultSet result = stmt.executeQuery();
+            while (result.next()) {
+                resultString = resultString.concat("id: " + result.getString("id") + "\n");
+                resultString = resultString.concat("tipo: " + result.getInt("tipo") + "\n");
+                resultString = resultString.concat("durata: " + result.getTime("durata") + "\n");
+                resultString = resultString.concat("titolo: " + result.getString("titolo") + "\n");
+                resultString = resultString.concat("descrizione: " + result.getString("descrizione") + "\n");
+                resultString = resultString.concat("locandina: " + result.getString("locandina") + "\n");
+                resultString = resultString.concat("data di uscita: " + result.getDate("dataDiUscita") + "\n");
+                resultString = resultString.concat("classificazione: " + result.getString("classificazione") + "\n");
+                resultString = resultString.concat("voto medio: " + result.getFloat("votoMedio") + "\n\n");
+            }
+        } catch (SQLException e) {
+            resultString = "Esecuzione query fallita";
+        }
+        return checkResult(resultString);  
+    }
     
 
     public String viewOperaByLavoratore(String nome, String cognome) {

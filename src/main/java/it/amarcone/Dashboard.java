@@ -7,11 +7,13 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
@@ -45,6 +47,7 @@ public class Dashboard extends JFrame {
         JTabbedPane tabbedPane = new JTabbedPane(1);
         tabbedPane.setForeground(getForeground());
 
+        tabbedPane.addTab("OP5", operazione05());
         tabbedPane.addTab("OP6", operazione06());
         tabbedPane.addTab("OP7", operazione07());
         tabbedPane.addTab("OP8", operazione08());
@@ -57,6 +60,58 @@ public class Dashboard extends JFrame {
 
         setContentPane(page);
         setVisible(true);
+    }
+
+    public JPanel operazione05(){
+        JPanel panel = new JPanel();
+
+        JLabel label_titolo = new JLabel("Recuperare da una lista tutte le opere che sono state già visualizzate e non");
+
+        JLabel label_username = new JLabel("Username");
+        JTextField field_username = new JTextField(10);
+
+        JLabel label_listaId = new JLabel("Id lista");
+        JTextField field_listaId = new JTextField(10);
+
+        JRadioButton visto = new JRadioButton("Opere visualizzate");
+        visto.setActionCommand("true");
+        visto.setSelected(true);
+
+        JRadioButton nonvisto = new JRadioButton("Opere non visualizzate");
+        nonvisto.setActionCommand("false");
+
+        ButtonGroup group = new ButtonGroup();
+        group.add(visto);
+        group.add(nonvisto);   
+
+        JButton submit = new JButton("Cerca");
+        submit.addActionListener(e -> {
+            String result;
+
+            if (field_username.getText().equals("") || field_listaId.getText().equals("")) {
+                result = "Campo vuoto";
+            } else {
+                database.createConnection();
+                result = database.viewOperefromListaViewed(field_username.getText(), Integer.parseInt(field_listaId.getText()), visto.isSelected());
+                database.closeConnection();
+            }
+            System.out.println("Opere della lista " + field_listaId.getText() +" di " + field_username.getText() + ":");
+            System.out.println(result);
+            console.setText("Opere della lista " + field_listaId.getText() +" di " + field_username.getText() + ":\n" + result);
+        });
+        panel.add(label_titolo);
+
+        panel.add(label_username);
+        panel.add(field_username);
+
+        panel.add(label_listaId);
+        panel.add(field_listaId);
+
+        panel.add(visto);
+        panel.add(nonvisto);
+
+        panel.add(submit);
+        return panel;
     }
 
     public JPanel operazione06(){
