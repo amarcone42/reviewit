@@ -150,10 +150,10 @@ public class DatabaseManager {
     public String viewOperefromListaViewed(String username, int listaId, boolean viewed) {
         String resultString = "";
         try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM opera WHERE "+
-                    "id IN ( SELECT operaId FROM collezione WHERE listaId = ?) or "+
-                    "id IN ( SELECT operaId FROM classificazione WHERE listaId = ?) AND "+
-                    "id "+ (viewed?"":"NOT") + " IN (SELECT operaId FROM recensione WHERE profiloId = ?)");
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM opera WHERE " +
+                    "(id IN ( SELECT operaId FROM collezione WHERE listaId = ?) " +
+                    "or id IN ( SELECT operaId FROM classificazione WHERE listaId = ?) ) " +
+                    "AND id "+ (viewed?"":"NOT") + " IN (SELECT operaId FROM recensione WHERE profiloId = ?)");
             stmt.setInt(1,listaId);
             stmt.setInt(2,listaId);
             stmt.setString(3,username);
