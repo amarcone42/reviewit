@@ -122,6 +122,31 @@ public class DatabaseManager {
         return result;
     }
 
+    public String viewOpereViewdByUtente(String username) {
+        String resultString = "";
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT o.* " +
+                    "FROM opera o INNER JOIN recensione r ON o.id = r.operaId " +
+                    "WHERE r.profiloId = ?");
+            stmt.setString(1,username);
+            ResultSet result = stmt.executeQuery();
+            while (result.next()) {
+                resultString = resultString.concat("id: " + result.getString("id") + "\n");
+                resultString = resultString.concat("tipo: " + result.getInt("tipo") + "\n");
+                resultString = resultString.concat("durata: " + result.getTime("durata") + "\n");
+                resultString = resultString.concat("titolo: " + result.getString("titolo") + "\n");
+                resultString = resultString.concat("descrizione: " + result.getString("descrizione") + "\n");
+                resultString = resultString.concat("locandina: " + result.getString("locandina") + "\n");
+                resultString = resultString.concat("data di uscita: " + result.getDate("dataDiUscita") + "\n");
+                resultString = resultString.concat("classificazione: " + result.getString("classificazione") + "\n");
+                resultString = resultString.concat("voto medio: " + result.getFloat("votoMedio") + "\n\n");
+            }
+        } catch (SQLException e) {
+            resultString = "Esecuzione query fallita";
+        }
+        return checkResult(resultString);  
+    }
+
     public String viewOperefromListaViewed(String username, int listaId, boolean viewed) {
         String resultString = "";
         try {
