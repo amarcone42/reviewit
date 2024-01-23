@@ -7,6 +7,7 @@ import java.util.Calendar;
 
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -41,6 +42,9 @@ public class Dashboard extends JFrame {
         setSize(900, 600);
         setResizable(true);
         setMinimumSize(new Dimension(800, 600));
+
+        ImageIcon icon = new ImageIcon("src/main/resources/reviewit.png");
+        setIconImage(icon.getImage());
 
         database = new DatabaseManager();
 
