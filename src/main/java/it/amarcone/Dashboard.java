@@ -17,6 +17,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
+import javax.swing.UIManager;
 
 import org.jdesktop.swingx.JXDatePicker;
 
@@ -66,7 +67,10 @@ public class Dashboard extends JFrame {
         
         page.add(scrollableTextArea);
 
-        setContentPane(page);
+        JPanel content = new JPanel();
+        content.setLayout(new BorderLayout());
+        content.add(page, BorderLayout.CENTER);
+        setContentPane(content);
         setVisible(true);
     }
 
@@ -75,7 +79,10 @@ public class Dashboard extends JFrame {
         SpringLayout layout = new SpringLayout();
         panel.setLayout(layout);
 
-        JLabel label_titolo = new JLabel("Recuperare le opere viste da un utente tramite le recensioni");
+        JLabel label_titolo = new JLabel("Operazione 4");
+        JLabel label_descrizione = new JLabel("Recuperare le opere viste da un utente tramite le recensioni");
+        label_titolo.setFont( UIManager.getFont( "h1.font" ) );
+        label_descrizione.setFont( UIManager.getFont( "default.font" ) );
 
         JLabel label_username = new JLabel("Username");
         JTextField field_username = new JTextField(FIELD_SIZE_L);
@@ -98,11 +105,14 @@ public class Dashboard extends JFrame {
         panel.add(label_titolo);
         layout.putConstraint(SpringLayout.WEST, label_titolo,BORDER_EXT,SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.NORTH, label_titolo,BORDER_EXT, SpringLayout.NORTH, panel);
+        panel.add(label_descrizione);
+        layout.putConstraint(SpringLayout.WEST, label_descrizione,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_descrizione,GAP_MID, SpringLayout.SOUTH, label_titolo);
 
         panel.add(label_username);
         panel.add(field_username);
         layout.putConstraint(SpringLayout.WEST, label_username,BORDER_EXT,SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.NORTH, label_username,GAP_BIG,SpringLayout.SOUTH, label_titolo);
+        layout.putConstraint(SpringLayout.NORTH, label_username,GAP_MID,SpringLayout.SOUTH, label_descrizione);
         layout.putConstraint(SpringLayout.WEST, field_username,BORDER_EXT,SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.NORTH, field_username,GAP_SMALL,SpringLayout.SOUTH, label_username);
 
@@ -118,7 +128,10 @@ public class Dashboard extends JFrame {
         SpringLayout layout = new SpringLayout();
         panel.setLayout(layout);
 
-        JLabel label_titolo = new JLabel("Recuperare da una lista tutte le opere che sono state già visualizzate e non");
+        JLabel label_titolo = new JLabel("Operazione 5");
+        JLabel label_descrizione = new JLabel("Recuperare da una lista tutte le opere che sono state già visualizzate e non");
+        label_titolo.setFont( UIManager.getFont( "h1.font" ) );
+        label_descrizione.setFont( UIManager.getFont( "default.font" ) );
 
         JLabel label_username = new JLabel("Username");
         JTextField field_username = new JTextField(FIELD_SIZE_L);
@@ -155,11 +168,14 @@ public class Dashboard extends JFrame {
         panel.add(label_titolo);
         layout.putConstraint(SpringLayout.WEST, label_titolo,BORDER_EXT,SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.NORTH, label_titolo,BORDER_EXT, SpringLayout.NORTH, panel);
+        panel.add(label_descrizione);
+        layout.putConstraint(SpringLayout.WEST, label_descrizione,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_descrizione,GAP_MID, SpringLayout.SOUTH, label_titolo);
 
         panel.add(label_username);
         panel.add(field_username);
-        layout.putConstraint(SpringLayout.WEST, label_username,0,SpringLayout.WEST, label_titolo);
-        layout.putConstraint(SpringLayout.NORTH, label_username,GAP_BIG,SpringLayout.SOUTH, label_titolo);
+        layout.putConstraint(SpringLayout.WEST, label_username,0,SpringLayout.WEST, label_descrizione);
+        layout.putConstraint(SpringLayout.NORTH, label_username,GAP_MID,SpringLayout.SOUTH, label_descrizione);
         layout.putConstraint(SpringLayout.WEST, field_username,BORDER_EXT,SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.NORTH, field_username,GAP_SMALL,SpringLayout.SOUTH, label_username);
 
@@ -188,7 +204,10 @@ public class Dashboard extends JFrame {
         SpringLayout layout = new SpringLayout();
         panel.setLayout(layout);
 
-        JLabel label_titolo = new JLabel("Recuperare tutte le opere a cui ha partecipato un lavoratore");
+        JLabel label_titolo = new JLabel("Operazione 6");
+        JLabel label_descrizione = new JLabel("Recuperare tutte le opere a cui ha partecipato un lavoratore");
+        label_titolo.setFont( UIManager.getFont( "h1.font" ) );
+        label_descrizione.setFont( UIManager.getFont( "default.font" ) );
 
         JLabel label_nome = new JLabel("Nome");
         JTextField field_nome = new JTextField(FIELD_SIZE_L);
@@ -214,11 +233,14 @@ public class Dashboard extends JFrame {
         panel.add(label_titolo);
         layout.putConstraint(SpringLayout.WEST, label_titolo,BORDER_EXT,SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.NORTH, label_titolo,BORDER_EXT, SpringLayout.NORTH, panel);
+        panel.add(label_descrizione);
+        layout.putConstraint(SpringLayout.WEST, label_descrizione,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_descrizione,GAP_MID, SpringLayout.SOUTH, label_titolo);
 
         panel.add(label_nome);
         panel.add(field_nome);
         layout.putConstraint(SpringLayout.WEST, label_nome,BORDER_EXT,SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.NORTH, label_nome,GAP_BIG, SpringLayout.SOUTH, label_titolo);
+        layout.putConstraint(SpringLayout.NORTH, label_nome,GAP_MID, SpringLayout.SOUTH, label_descrizione);
         layout.putConstraint(SpringLayout.WEST, field_nome,BORDER_EXT,SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.NORTH, field_nome,GAP_SMALL, SpringLayout.SOUTH, label_nome);
 
@@ -241,7 +263,10 @@ public class Dashboard extends JFrame {
         SpringLayout layout = new SpringLayout();
         panel.setLayout(layout);
 
-        JLabel label_titolo = new JLabel("Recuperare le notizie pubblicate da un utente");
+        JLabel label_titolo = new JLabel("Operazione 7");
+        JLabel label_descrizione = new JLabel("Recuperare le notizie pubblicate da un utente");
+        label_titolo.setFont( UIManager.getFont( "h1.font" ) );
+        label_descrizione.setFont( UIManager.getFont( "default.font" ) );
 
         JLabel label_username = new JLabel("Username");
         JTextField field_username = new JTextField(FIELD_SIZE_L);
@@ -264,11 +289,14 @@ public class Dashboard extends JFrame {
         panel.add(label_titolo);
         layout.putConstraint(SpringLayout.WEST, label_titolo,BORDER_EXT,SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.NORTH, label_titolo,BORDER_EXT, SpringLayout.NORTH, panel);
+        panel.add(label_descrizione);
+        layout.putConstraint(SpringLayout.WEST, label_descrizione,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_descrizione,GAP_MID, SpringLayout.SOUTH, label_titolo);
 
         panel.add(label_username);
         panel.add(field_username);
         layout.putConstraint(SpringLayout.WEST, label_username,BORDER_EXT,SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.NORTH, label_username,GAP_BIG,SpringLayout.SOUTH, label_titolo);
+        layout.putConstraint(SpringLayout.NORTH, label_username,GAP_MID,SpringLayout.SOUTH, label_descrizione);
         layout.putConstraint(SpringLayout.WEST, field_username,BORDER_EXT,SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.NORTH, field_username,GAP_SMALL,SpringLayout.SOUTH, label_username);
 
@@ -284,7 +312,10 @@ public class Dashboard extends JFrame {
         SpringLayout layout = new SpringLayout();
         panel.setLayout(layout);
 
-        JLabel label_titolo = new JLabel("Opere viste in un range temporale");
+        JLabel label_titolo = new JLabel("Operazione 8");
+        JLabel label_descrizione = new JLabel("Opere viste in un range temporale");
+        label_titolo.setFont( UIManager.getFont( "h1.font" ) );
+        label_descrizione.setFont( UIManager.getFont( "default.font" ) );
 
         JLabel label_username = new JLabel("Username");
         JTextField field_username = new JTextField(FIELD_SIZE_L);
@@ -321,11 +352,14 @@ public class Dashboard extends JFrame {
         panel.add(label_titolo);
         layout.putConstraint(SpringLayout.WEST, label_titolo,BORDER_EXT,SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.NORTH, label_titolo,BORDER_EXT, SpringLayout.NORTH, panel);
+        panel.add(label_descrizione);
+        layout.putConstraint(SpringLayout.WEST, label_descrizione,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_descrizione,GAP_MID, SpringLayout.SOUTH, label_titolo);
 
         panel.add(label_username);
         panel.add(field_username);
         layout.putConstraint(SpringLayout.WEST, label_username,BORDER_EXT,SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.NORTH, label_username,GAP_BIG,SpringLayout.SOUTH, label_titolo);
+        layout.putConstraint(SpringLayout.NORTH, label_username,GAP_MID,SpringLayout.SOUTH, label_descrizione);
         layout.putConstraint(SpringLayout.WEST, field_username,BORDER_EXT,SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.NORTH, field_username,GAP_SMALL,SpringLayout.SOUTH, label_username);
 
@@ -355,7 +389,10 @@ public class Dashboard extends JFrame {
         SpringLayout layout = new SpringLayout();
         panel.setLayout(layout);
 
-        JLabel label_titolo = new JLabel("Numero opere viste in un range temporale");
+        JLabel label_titolo = new JLabel("Operazione 9");
+        JLabel label_descrizione = new JLabel("Numero opere viste in un range temporale");
+        label_titolo.setFont( UIManager.getFont( "h1.font" ) );
+        label_descrizione.setFont( UIManager.getFont( "default.font" ) );
 
         JLabel label_username = new JLabel("Username");
         JTextField field_username = new JTextField(FIELD_SIZE_L);
@@ -397,11 +434,14 @@ public class Dashboard extends JFrame {
         panel.add(label_titolo);
         layout.putConstraint(SpringLayout.WEST, label_titolo,BORDER_EXT,SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.NORTH, label_titolo,BORDER_EXT, SpringLayout.NORTH, panel);
-
+        panel.add(label_descrizione);
+        layout.putConstraint(SpringLayout.WEST, label_descrizione,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_descrizione,GAP_MID, SpringLayout.SOUTH, label_titolo);
+        
         panel.add(label_username);
         panel.add(field_username);
         layout.putConstraint(SpringLayout.WEST, label_username,BORDER_EXT,SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.NORTH, label_username,GAP_BIG,SpringLayout.SOUTH, label_titolo);
+        layout.putConstraint(SpringLayout.NORTH, label_username,GAP_MID,SpringLayout.SOUTH, label_descrizione);
         layout.putConstraint(SpringLayout.WEST, field_username,BORDER_EXT,SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.NORTH, field_username,GAP_SMALL,SpringLayout.SOUTH, label_username);
 
@@ -431,7 +471,10 @@ public class Dashboard extends JFrame {
         SpringLayout layout = new SpringLayout();
         panel.setLayout(layout);
 
-        JLabel label_titolo = new JLabel("Conteggio follower");
+        JLabel label_titolo = new JLabel("Operazione 11");
+        JLabel label_descrizione = new JLabel("Conteggio follower");
+        label_titolo.setFont( UIManager.getFont( "h1.font" ) );
+        label_descrizione.setFont( UIManager.getFont( "default.font" ) );
 
         JLabel label_username = new JLabel("Username");
         JTextField field_username = new JTextField(FIELD_SIZE_L);
@@ -458,11 +501,14 @@ public class Dashboard extends JFrame {
         panel.add(label_titolo);
         layout.putConstraint(SpringLayout.WEST, label_titolo,BORDER_EXT,SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.NORTH, label_titolo,BORDER_EXT, SpringLayout.NORTH, panel);
-
+        panel.add(label_descrizione);
+        layout.putConstraint(SpringLayout.WEST, label_descrizione,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_descrizione,GAP_MID, SpringLayout.SOUTH, label_titolo);
+        
         panel.add(label_username);
         panel.add(field_username);
         layout.putConstraint(SpringLayout.WEST, label_username,BORDER_EXT,SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.NORTH, label_username,GAP_BIG,SpringLayout.SOUTH, label_titolo);
+        layout.putConstraint(SpringLayout.NORTH, label_username,GAP_MID,SpringLayout.SOUTH, label_descrizione);
         layout.putConstraint(SpringLayout.WEST, field_username,BORDER_EXT,SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.NORTH, field_username,GAP_SMALL,SpringLayout.SOUTH, label_username);
 
