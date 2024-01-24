@@ -66,6 +66,7 @@ public class Dashboard extends JFrame {
         tabbedPane.addTab("OP8", operazione08());
         tabbedPane.addTab("OP9", operazione09());
         tabbedPane.addTab("OP11", operazione11());
+        tabbedPane.addTab("OP13", operazione13());
 
         page.add(tabbedPane);
         
@@ -84,7 +85,7 @@ public class Dashboard extends JFrame {
         panel.setLayout(layout);
 
         JLabel label_titolo = new JLabel("Operazione 4");
-        JLabel label_descrizione = new JLabel("Recuperare le opere viste da un utente tramite le recensioni");
+        JLabel label_descrizione = new JLabel("Recuperare le opere che ha recensito un utente");
         label_titolo.setFont( UIManager.getFont( "h1.font" ) );
         label_descrizione.setFont( UIManager.getFont( "default.font" ) );
 
@@ -476,7 +477,7 @@ public class Dashboard extends JFrame {
         panel.setLayout(layout);
 
         JLabel label_titolo = new JLabel("Operazione 11");
-        JLabel label_descrizione = new JLabel("Conteggio follower");
+        JLabel label_descrizione = new JLabel("Numero follower");
         label_titolo.setFont( UIManager.getFont( "h1.font" ) );
         label_descrizione.setFont( UIManager.getFont( "default.font" ) );
 
@@ -519,6 +520,40 @@ public class Dashboard extends JFrame {
         panel.add(submit);
         layout.putConstraint(SpringLayout.WEST, submit,BORDER_EXT,SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.NORTH, submit,GAP_MID,SpringLayout.SOUTH, field_username);
+
+        return panel;
+    }
+
+    public JPanel operazione13() {
+        JPanel panel = new JPanel();
+        SpringLayout layout = new SpringLayout();
+        panel.setLayout(layout);
+
+        JLabel label_titolo = new JLabel("Operazione 13");
+        JLabel label_descrizione = new JLabel("Ordina lavoratori per numero di opere");
+        label_titolo.setFont( UIManager.getFont( "h1.font" ) );
+        label_descrizione.setFont( UIManager.getFont( "default.font" ) );
+
+        JButton submit = new JButton("Recupera");
+        submit.addActionListener(e -> {
+            String result;
+            int resultNumber = 0;
+            database.createConnection();
+            result = database.viewLavoratoriOrderByNumeroOpere();
+            database.closeConnection();
+            System.out.println("Lista dei lavoratori in ordine di numero di opere: \n" + result);
+            console.setText("Lista dei lavoratori in ordine di numero di opere: \n" + result);
+        });
+        panel.add(label_titolo);
+        layout.putConstraint(SpringLayout.WEST, label_titolo,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_titolo,BORDER_EXT, SpringLayout.NORTH, panel);
+        panel.add(label_descrizione);
+        layout.putConstraint(SpringLayout.WEST, label_descrizione,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_descrizione,GAP_MID, SpringLayout.SOUTH, label_titolo);
+
+        panel.add(submit);
+        layout.putConstraint(SpringLayout.WEST, submit,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, submit,GAP_MID,SpringLayout.SOUTH, label_descrizione);
 
         return panel;
     }

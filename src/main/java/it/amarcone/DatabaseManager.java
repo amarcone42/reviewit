@@ -282,4 +282,30 @@ public class DatabaseManager {
         return -1;
     }
 
+        public String viewLavoratoriOrderByNumeroOpere() {
+        String resultString = "";
+        try {
+            PreparedStatement stmt = connection.prepareStatement("((SELECT l.id, l.nome, l.cognome, COUNT(DISTINCT(operaId)) as numeroOpere\n" + //
+                    "FROM recitazione r INNER JOIN lavoratore l ON r.attoreId = l.id\n" + //
+                    "GROUP BY l.id, l.nome, l.cognome\n" + //
+                    ")\n" + //
+                    "union all\n" + //
+                    "(SELECT l.id, l.nome, l.cognome, COUNT(DISTINCT(operaId)) as numeroOpere\n" + //
+                    "FROM partecipazione p INNER JOIN lavoratore l ON p.membroCrewId = l.id\n" + //
+                    "GROUP BY l.id, l.nome, l.cognome\n" + //
+                    "))\n" + //
+                    "ORDER BY numeroOpere DESC;");
+            ResultSet result = stmt.executeQuery();
+            while (result.next()) {
+                resultString = resultString.concat("id: " + result.getString("id") + "\n");
+                resultString = resultString.concat("Nome: " + result.getString("nome") + "\n");
+                resultString = resultString.concat("Cognome: " + result.getString("cognome") + "\n");
+                resultString = resultString.concat("Numero opere: " + result.getInt("numeroOpere") + "\n\n");
+            }
+        } catch (SQLException e) {
+            resultString = "Esecuzione query fallita";
+        }
+        return checkResult(resultString);   
+    }
+
 }
