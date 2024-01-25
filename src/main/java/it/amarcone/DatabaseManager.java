@@ -335,4 +335,41 @@ public class DatabaseManager {
         }
         return checkResult(resultString);   
     }
+
+    public String reportUtente(String username) {
+        String resultString = "";
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT username, grado, nome, cognome, biografia, COUNT(s.profiloSeguente) AS numFollower\r\n" + //
+                    "FROM profilo p INNER JOIN seguire s ON p.username = s.profiloSeguito\r\n" + //
+                    "WHERE p.username = ?\n" + //
+                    "GROUP BY p.username");
+            stmt.setString(1,username);
+            ResultSet result = stmt.executeQuery();
+            if (result.next()) {
+                resultString = resultString.concat("username: " + result.getString("username") + "\n");
+                resultString = resultString.concat("grado: " + result.getInt("grado") + "\n");
+                resultString = resultString.concat("nome: " + result.getString("nome") + "\n");
+                resultString = resultString.concat("cognome: " + result.getString("cognome") + "\n");
+                resultString = resultString.concat("biografia: " + result.getString("biografia") + "\n");
+                resultString = resultString.concat("follower: " + result.getInt("numFollower") + "\n\n");
+            }
+
+            resultString = resultString.concat("Opere viste e recensite:\n");
+            stmt = connection.prepareStatement("SELECT o.titolo, o.descrizione, r.data, r.voto, r.descrizione AS recensione\r\n" + //
+                    "FROM recensione r INNER JOIN opera o ON r.operaId = o.id\r\n" + //
+                    "WHERE r.profiloId = ?");
+            stmt.setString(1,username);
+            result = stmt.executeQuery();
+            while (result.next()) {
+                resultString = resultString.concat("titolo: " + result.getString("titolo") + "\n");
+                resultString = resultString.concat("descrizione: " + result.getString("descrizione") + "\n");
+                resultString = resultString.concat("data: " + result.getDate("data") + "\n");
+                resultString = resultString.concat("voto: " + result.getFloat("voto") + "\n");
+                resultString = resultString.concat("recensione: " + result.getString("recensione") + "\n\n");
+            }
+        } catch (SQLException e) {
+            resultString = "Esecuzione query fallita";
+        }
+        return checkResult(resultString);   
+    }
 }
