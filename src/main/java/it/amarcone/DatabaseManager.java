@@ -282,7 +282,7 @@ public class DatabaseManager {
         return -1;
     }
 
-        public String viewLavoratoriOrderByNumeroOpere() {
+    public String viewLavoratoriOrderByNumeroOpere() {
         String resultString = "";
         try {
             PreparedStatement stmt = connection.prepareStatement("((SELECT l.id, l.nome, l.cognome, COUNT(DISTINCT(operaId)) as numeroOpere\n" + //
@@ -308,4 +308,31 @@ public class DatabaseManager {
         return checkResult(resultString);   
     }
 
+    public String viewOpereWithRegistaMultipleRoles() {
+        String resultString = "";
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT o.*\r\n" + //
+                    "FROM opera o INNER JOIN partecipazione p ON o.id=p.operaId\r\n" + //
+                    "GROUP BY o.id, p.ruolo , p.membroCrewId\r\n" + //
+                    "HAVING p.ruolo != \"Regista\" AND p.membroCrewId IN (\r\n" + //
+                    "SELECT membroCrewId\r\n" + //
+                    "FROM partecipazione\r\n" + //
+                    "WHERE ruolo = \"Regista\" AND operaId=o.id )");
+            ResultSet result = stmt.executeQuery();
+            while (result.next()) {
+                resultString = resultString.concat("id: " + result.getInt("id") + "\n");
+                resultString = resultString.concat("tipo: " + result.getInt("tipo") + "\n");
+                resultString = resultString.concat("durata: " + result.getTime("durata") + "\n");
+                resultString = resultString.concat("titolo: " + result.getString("titolo") + "\n");
+                resultString = resultString.concat("descrizione: " + result.getString("descrizione") + "\n");
+                resultString = resultString.concat("locandina: " + result.getString("locandina") + "\n");
+                resultString = resultString.concat("data di uscita: " + result.getDate("dataDiUscita") + "\n");
+                resultString = resultString.concat("classificazione: " + result.getString("classificazione") + "\n");
+                resultString = resultString.concat("voto medio: " + result.getFloat("votoMedio") + "\n\n");
+            }
+        } catch (SQLException e) {
+            resultString = "Esecuzione query fallita";
+        }
+        return checkResult(resultString);   
+    }
 }
