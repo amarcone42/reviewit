@@ -372,4 +372,53 @@ public class DatabaseManager {
         }
         return checkResult(resultString);   
     }
+
+    public String insertAttore(String nome, String cognome, String immagine, String dataDiNascita, String dataDiMorte, String titolo, String personaggio) {
+        int idLavoratore = -1;
+        String resultString = "";
+        try {
+            PreparedStatement stmt = connection.prepareStatement("INSERT INTO reviewit.lavoratore\n" + //
+                    "\t(nome, cognome, immagine, dataDiNascita, dataDiMorte)\n" + //
+                    "\tVALUES (?, ?, ?, ?, ?)");
+            stmt.setString(1,nome);
+            stmt.setString(2,cognome);
+            stmt.setString(3,immagine);
+            stmt.setString(4,dataDiNascita);
+            stmt.setString(5,dataDiMorte);
+            ResultSet result = stmt.executeQuery();
+
+            stmt = connection.prepareStatement("SELECT id\n" + //
+                    "FROM lavoratore\n" + //
+                    "WHERE nome = ? AND cognome = ? AND immagine = ? AND dataDiNascita = ?");
+            stmt.setString(1,nome);
+            stmt.setString(2,cognome);
+            stmt.setString(3,immagine);
+            stmt.setString(4,dataDiNascita);
+            result = stmt.executeQuery();
+            while (result.next()) {
+                idLavoratore = result.getInt("id");
+            }
+
+            stmt = connection.prepareStatement("INSERT INTO reviewit.attore\n" + //
+                    "\t(lavoratoreId)\n" + //
+                    "\tVALUES(?)");
+            stmt.setInt(1,idLavoratore);
+            result = stmt.executeQuery();
+
+            stmt = connection.prepareStatement("INSERT INTO reviewit.recitazione\n" + //
+                    "\t(operaId, attoreId, nomePersonaggio)\n" + //
+                    "SELECT o.id, (?), (?)\n" + //
+                    "FROM opera o\n" + //
+                    "WHERE titolo LIKE ?");
+            stmt.setInt(1,idLavoratore);
+            stmt.setString(2,personaggio);
+            stmt.setString(3,titolo);
+            result = stmt.executeQuery();
+
+            resultString = "Inserimento lavoratore avvenuto con successo";
+        } catch (SQLException e) {
+            resultString = "Esecuzione query fallita";
+        }
+        return checkResult(resultString);   
+    }
 }
