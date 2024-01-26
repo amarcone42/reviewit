@@ -419,6 +419,6 @@ public class DatabaseManager {
         } catch (SQLException e) {
             resultString = "Esecuzione query fallita";
         }
-        return checkResult(resultString);   
+        return checkResult(resultString);
     }
 }

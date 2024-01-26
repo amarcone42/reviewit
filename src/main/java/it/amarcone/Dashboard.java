@@ -59,6 +59,7 @@ public class Dashboard extends JFrame {
         JTabbedPane tabbedPane = new JTabbedPane(1);
         tabbedPane.setForeground(getForeground());
 
+        tabbedPane.addTab("OP2", operazione02());
         tabbedPane.addTab("OP4", operazione04());
         tabbedPane.addTab("OP5", operazione05());
         tabbedPane.addTab("OP6", operazione06());
@@ -79,6 +80,129 @@ public class Dashboard extends JFrame {
         content.add(page, BorderLayout.CENTER);
         setContentPane(content);
         setVisible(true);
+    }
+
+    public JPanel operazione02() {
+        JPanel panel = new JPanel();
+        SpringLayout layout = new SpringLayout();
+        panel.setLayout(layout);
+
+        JLabel label_titolo = new JLabel("Operazione 02");
+        JLabel label_descrizione = new JLabel("Inserimento di un lavoratore");
+        label_titolo.setFont( UIManager.getFont( "h1.font" ) );
+        label_descrizione.setFont( UIManager.getFont( "default.font" ) );
+
+        JLabel label_nome = new JLabel("Nome");
+        JTextField field_nome = new JTextField(FIELD_SIZE_L);
+
+        JLabel label_cognome = new JLabel("Cognome");
+        JTextField field_cognome = new JTextField(FIELD_SIZE_L);
+
+        JLabel label_immagine = new JLabel("Immagine");
+        JTextField field_immagine = new JTextField(FIELD_SIZE_L);
+
+        JLabel label_dataNascita = new JLabel("Data nascita");
+        JXDatePicker pickerDataNascita = new JXDatePicker ();
+        pickerDataNascita.setDate (Calendar.getInstance ().getTime ());
+        pickerDataNascita.setFormats (new SimpleDateFormat ("dd/MM/yyyy"));
+
+        JLabel label_dataMorte = new JLabel("Data morte");
+        JXDatePicker pickerDataMorte = new JXDatePicker ();
+        //pickerDataMorte.setDate (Calendar.getInstance ().getTime ());
+        pickerDataMorte.setFormats (new SimpleDateFormat ("dd/MM/yyyy"));
+
+        JLabel label_titoloOpera = new JLabel("Titolo opera");
+        JTextField field_titoloOpera = new JTextField(FIELD_SIZE_L);
+
+        JLabel label_personaggio = new JLabel("personaggio");
+        JTextField field_personaggio = new JTextField(FIELD_SIZE_L);
+
+        JButton submit = new JButton("Cerca");
+        submit.addActionListener(e -> {
+            SimpleDateFormat desiredFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String dataNascita = "";
+            String dataMorte = "";
+
+            if(pickerDataNascita.getDate() != null){
+                dataNascita = desiredFormat.format(pickerDataNascita.getDate());
+            }
+            if(pickerDataMorte.getDate() != null){
+                dataMorte = desiredFormat.format(pickerDataMorte.getDate());
+            }
+
+            String result = null;
+
+            if (dataNascita.equals("") || field_nome.getText().equals("") || field_cognome.getText().equals("") || field_immagine.getText().equals("") ||  field_titoloOpera.getText().equals("") || field_personaggio.getText().equals("")) {
+                result = "Campo vuoto";
+            } else {
+                database.createConnection();
+                //result = database.reportUtente(field_username.getText());
+                database.closeConnection();
+            }
+            System.out.println(result);
+            console.setText(result);
+        });
+        panel.add(label_titolo);
+        layout.putConstraint(SpringLayout.WEST, label_titolo,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_titolo,BORDER_EXT, SpringLayout.NORTH, panel);
+        panel.add(label_descrizione);
+        layout.putConstraint(SpringLayout.WEST, label_descrizione,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_descrizione,GAP_MID, SpringLayout.SOUTH, label_titolo);
+
+        panel.add(label_nome);
+        panel.add(field_nome);
+        layout.putConstraint(SpringLayout.WEST, label_nome,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_nome,GAP_MID,SpringLayout.SOUTH, label_descrizione);
+        layout.putConstraint(SpringLayout.WEST, field_nome,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, field_nome,GAP_SMALL,SpringLayout.SOUTH, label_nome);
+
+        panel.add(label_cognome);
+        panel.add(field_cognome);
+        layout.putConstraint(SpringLayout.WEST, label_cognome,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_cognome,GAP_MID,SpringLayout.SOUTH, field_nome);
+        layout.putConstraint(SpringLayout.WEST, field_cognome,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, field_cognome,GAP_SMALL,SpringLayout.SOUTH, label_cognome);
+
+        panel.add(label_immagine);
+        panel.add(field_immagine);
+        layout.putConstraint(SpringLayout.WEST, label_immagine,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_immagine,GAP_MID,SpringLayout.SOUTH, field_cognome);
+        layout.putConstraint(SpringLayout.WEST, field_immagine,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, field_immagine,GAP_SMALL,SpringLayout.SOUTH, label_immagine);
+
+        panel.add(label_dataNascita);
+        panel.add(pickerDataNascita);
+        layout.putConstraint(SpringLayout.WEST, label_dataNascita,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_dataNascita,GAP_MID,SpringLayout.SOUTH, field_immagine);
+        layout.putConstraint(SpringLayout.WEST, pickerDataNascita,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, pickerDataNascita,GAP_SMALL,SpringLayout.SOUTH, label_dataNascita);
+
+        panel.add(label_dataMorte);
+        panel.add(pickerDataMorte);
+        layout.putConstraint(SpringLayout.WEST, label_dataMorte,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_dataMorte,GAP_MID,SpringLayout.SOUTH, pickerDataNascita);
+        layout.putConstraint(SpringLayout.WEST, pickerDataMorte,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, pickerDataMorte,GAP_SMALL,SpringLayout.SOUTH, label_dataMorte);
+
+        panel.add(label_titoloOpera);
+        panel.add(field_titoloOpera);
+        layout.putConstraint(SpringLayout.WEST, label_titoloOpera,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_titoloOpera,GAP_MID,SpringLayout.SOUTH, pickerDataMorte);
+        layout.putConstraint(SpringLayout.WEST, field_titoloOpera,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, field_titoloOpera,GAP_SMALL,SpringLayout.SOUTH, label_titoloOpera);
+
+        panel.add(label_personaggio);
+        panel.add(field_personaggio);
+        layout.putConstraint(SpringLayout.WEST, label_personaggio,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_personaggio,GAP_MID,SpringLayout.SOUTH, field_titoloOpera);
+        layout.putConstraint(SpringLayout.WEST, field_personaggio,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, field_personaggio,GAP_SMALL,SpringLayout.SOUTH, label_personaggio);
+
+        panel.add(submit);
+        layout.putConstraint(SpringLayout.WEST, submit,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, submit,GAP_MID,SpringLayout.SOUTH, field_personaggio);
+
+        return panel;
     }
 
     public JPanel operazione04(){
@@ -640,4 +764,6 @@ public class Dashboard extends JFrame {
 
         return panel;
     }
+
+    
 }
