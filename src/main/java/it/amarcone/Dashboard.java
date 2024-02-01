@@ -117,7 +117,16 @@ public class Dashboard extends JFrame {
         JLabel label_personaggio = new JLabel("personaggio");
         JTextField field_personaggio = new JTextField(FIELD_SIZE_L);
 
-        JButton submit = new JButton("Cerca");
+
+        JButton submitShowOpere = new JButton("Elenco opere");
+        submitShowOpere.addActionListener(e -> {
+            database.createConnection();
+            String opere = database.showOpere();
+            database.closeConnection();
+            console.setText(opere);
+        });
+
+        JButton submit = new JButton("Inserisci");
         submit.addActionListener(e -> {
             SimpleDateFormat desiredFormat = new SimpleDateFormat("yyyy-MM-dd");
             String dataNascita = "";
@@ -136,7 +145,7 @@ public class Dashboard extends JFrame {
                 result = "Campo vuoto";
             } else {
                 database.createConnection();
-                //result = database.reportUtente(field_username.getText());
+                result = database.insertAttore(field_nome.getText(), field_cognome.getText(), field_immagine.getText(), dataNascita, dataMorte, field_titoloOpera.getText(), field_personaggio.getText());
                 database.closeConnection();
             }
             System.out.println(result);
@@ -198,9 +207,13 @@ public class Dashboard extends JFrame {
         layout.putConstraint(SpringLayout.WEST, field_personaggio,BORDER_EXT,SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.NORTH, field_personaggio,GAP_SMALL,SpringLayout.SOUTH, label_personaggio);
 
+        panel.add(submitShowOpere);
+        layout.putConstraint(SpringLayout.WEST, submitShowOpere,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, submitShowOpere,GAP_MID,SpringLayout.SOUTH, field_personaggio);
+
         panel.add(submit);
-        layout.putConstraint(SpringLayout.WEST, submit,BORDER_EXT,SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.NORTH, submit,GAP_MID,SpringLayout.SOUTH, field_personaggio);
+        layout.putConstraint(SpringLayout.WEST, submit,BORDER_EXT,SpringLayout.WEST, submitShowOpere);
+        layout.putConstraint(SpringLayout.NORTH, submit,GAP_MID,SpringLayout.SOUTH, submitShowOpere);
 
         return panel;
     }
