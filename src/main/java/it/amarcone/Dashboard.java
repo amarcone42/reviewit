@@ -83,6 +83,30 @@ public class Dashboard extends JFrame {
         setVisible(true);
     }
 
+    public JButton getShowUsernameButton(){
+        JButton submitShowUsername = new JButton("Elenco utenti");
+        submitShowUsername.addActionListener(e -> {
+            database.createConnection();
+            String usernames = database.showUsers();
+            database.closeConnection();
+            console.setText(usernames);
+        });
+
+        return submitShowUsername;
+    }
+
+    public JButton getShowOpereButton(){
+        JButton submitShowOpere = new JButton("Elenco opere");
+        submitShowOpere.addActionListener(e -> {
+            database.createConnection();
+            String opere = database.showOpere();
+            database.closeConnection();
+            console.setText(opere);
+        });
+
+        return submitShowOpere;
+    }
+
     public JPanel operazione02() {
         JPanel panel = new JPanel();
         SpringLayout layout = new SpringLayout();
@@ -119,13 +143,7 @@ public class Dashboard extends JFrame {
         JTextField field_personaggio = new JTextField(FIELD_SIZE_L);
 
 
-        JButton submitShowOpere = new JButton("Elenco opere");
-        submitShowOpere.addActionListener(e -> {
-            database.createConnection();
-            String opere = database.showOpere();
-            database.closeConnection();
-            console.setText(opere);
-        });
+        JButton submitShowOpere = getShowOpereButton();
 
         JButton submit = new JButton("Inserisci");
         submit.addActionListener(e -> {
@@ -213,7 +231,7 @@ public class Dashboard extends JFrame {
         layout.putConstraint(SpringLayout.NORTH, submitShowOpere,GAP_MID,SpringLayout.SOUTH, field_personaggio);
 
         panel.add(submit);
-        layout.putConstraint(SpringLayout.WEST, submit,BORDER_EXT,SpringLayout.WEST, submitShowOpere);
+        layout.putConstraint(SpringLayout.WEST, submit,BORDER_EXT,SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.NORTH, submit,GAP_MID,SpringLayout.SOUTH, submitShowOpere);
 
         return panel;
@@ -265,15 +283,11 @@ public class Dashboard extends JFrame {
 
         ButtonGroup spoilerGroup = new ButtonGroup();
         spoilerGroup.add(spoilerSi);
-        spoilerGroup.add(spoilerNo);  
+        spoilerGroup.add(spoilerNo);
 
-        JButton submitShowOpere = new JButton("Elenco opere");
-        submitShowOpere.addActionListener(e -> {
-            database.createConnection();
-            String opere = database.showOpere();
-            database.closeConnection();
-            console.setText(opere);
-        });
+        JButton submitShowUsername = getShowUsernameButton();
+
+        JButton submitShowOpere = getShowOpereButton();
 
         JButton submit = new JButton("Inserisci");
         submit.addActionListener(e -> {
@@ -349,12 +363,16 @@ public class Dashboard extends JFrame {
         layout.putConstraint(SpringLayout.WEST, spoilerNo,40,SpringLayout.WEST, spoilerSi);
         layout.putConstraint(SpringLayout.NORTH, spoilerNo,GAP_SMALL,SpringLayout.SOUTH, label_spoiler);
 
+        panel.add(submitShowUsername);
+        layout.putConstraint(SpringLayout.WEST, submitShowUsername,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, submitShowUsername,GAP_MID,SpringLayout.SOUTH, spoilerSi);
+
         panel.add(submitShowOpere);
         layout.putConstraint(SpringLayout.WEST, submitShowOpere,BORDER_EXT,SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.NORTH, submitShowOpere,GAP_MID,SpringLayout.SOUTH, spoilerSi);
+        layout.putConstraint(SpringLayout.NORTH, submitShowOpere,GAP_MID,SpringLayout.SOUTH, submitShowUsername);
 
         panel.add(submit);
-        layout.putConstraint(SpringLayout.WEST, submit,BORDER_EXT,SpringLayout.WEST, submitShowOpere);
+        layout.putConstraint(SpringLayout.WEST, submit,BORDER_EXT,SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.NORTH, submit,GAP_MID,SpringLayout.SOUTH, submitShowOpere);
 
         return panel;

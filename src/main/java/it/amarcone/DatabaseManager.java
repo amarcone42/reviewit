@@ -121,6 +121,22 @@ public class DatabaseManager {
         }
         return result;
     }
+    public String showUsers() {
+        String resultString = "";
+        PreparedStatement stmt = null;
+        try {
+            stmt = connection.prepareStatement("SELECT username FROM reviewit.profilo");
+    
+            ResultSet result = stmt.executeQuery();
+            while (result.next()) {
+                resultString = resultString.concat("username: " + result.getString("username") + "\n\n");
+            }
+        } catch (SQLException e) {
+            resultString = "Esecuzione query fallita";
+        }
+
+        return checkResult(resultString);
+    }
 
     public String showOpere() {
         String resultString = "";
