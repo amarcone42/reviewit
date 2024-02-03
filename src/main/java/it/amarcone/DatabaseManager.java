@@ -226,6 +226,68 @@ public class DatabaseManager {
         return checkResult(resultString);
     }
 
+    public String insertRecensione(String username,String titolo, String data, float voto, String descrizione, Boolean preferito, Boolean spoiler) {
+        int idOpera = -1;
+        String resultString = "";
+        PreparedStatement stmt = null;
+        ResultSet result = null;
+        try {
+            stmt = connection.prepareStatement("SELECT o.id " +
+                                "FROM opera o " +
+                                "WHERE o.titolo LIKE ?");
+            stmt.setString(1, titolo + "%");
+            result = stmt.executeQuery();
+            if (result.next()) {
+                idOpera = result.getInt("id");
+            }
+        } catch (SQLException e) {
+            resultString = "Errore query 1";
+            return resultString;
+        }
+
+        try {
+            stmt = connection.prepareStatement("INSERT INTO reviewit.recensione " + //
+                                "\t(profiloId, operaId, data, voto, descrizione, preferito, spoiler) " + //
+                                "\tVALUES (?, ?, ?, ?, ?, ?, ?)");
+            stmt.setString(1, username);
+            stmt.setInt(2, idOpera);
+            stmt.setString(3, data);
+            stmt.setFloat(4, voto);
+            stmt.setString(5, descrizione);
+            stmt.setBoolean(6, preferito);
+            stmt.setBoolean(7, spoiler);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            resultString = "Errore query 2";
+            return resultString;
+        }
+
+        try {
+            stmt = connection.prepareStatement("UPDATE opera \n" + //
+                                "SET opera.votoMedio = ROUND(((opera.votoMedio * opera.numRecensioni) + ?) / (opera.numRecensioni + 1),1) \n" + //
+                                "WHERE opera.id = ?");
+            stmt.setFloat(1, voto);
+            stmt.setInt(2, idOpera);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            resultString = "Errore query 3";
+            return resultString;
+        }
+
+        try {
+            stmt = connection.prepareStatement("UPDATE opera \n" + //
+                                "SET opera.numRecensioni = opera.numRecensioni + 1 \n" + //
+                                "WHERE opera.id = ?");
+            stmt.setInt(1, idOpera);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            resultString = "Errore query 4";
+            return resultString;
+        }
+        resultString = "Inserimento recensione avvenuto con successo";
+        return resultString;
+    }
+
     public String viewOpereViewdByUtente(String username) {
         String resultString = "";
         try {

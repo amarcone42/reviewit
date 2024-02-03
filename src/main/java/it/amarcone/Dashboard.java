@@ -60,6 +60,7 @@ public class Dashboard extends JFrame {
         tabbedPane.setForeground(getForeground());
 
         tabbedPane.addTab("OP2", operazione02());
+        tabbedPane.addTab("OP3", operazione03());
         tabbedPane.addTab("OP4", operazione04());
         tabbedPane.addTab("OP5", operazione05());
         tabbedPane.addTab("OP6", operazione06());
@@ -210,6 +211,147 @@ public class Dashboard extends JFrame {
         panel.add(submitShowOpere);
         layout.putConstraint(SpringLayout.WEST, submitShowOpere,BORDER_EXT,SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.NORTH, submitShowOpere,GAP_MID,SpringLayout.SOUTH, field_personaggio);
+
+        panel.add(submit);
+        layout.putConstraint(SpringLayout.WEST, submit,BORDER_EXT,SpringLayout.WEST, submitShowOpere);
+        layout.putConstraint(SpringLayout.NORTH, submit,GAP_MID,SpringLayout.SOUTH, submitShowOpere);
+
+        return panel;
+    }
+
+    public JPanel operazione03() {
+        JPanel panel = new JPanel();
+        SpringLayout layout = new SpringLayout();
+        panel.setLayout(layout);
+
+        JLabel label_titolo = new JLabel("Operazione 03");
+        JLabel label_descrizione = new JLabel("Inserimento di una recensione");
+        label_titolo.setFont( UIManager.getFont( "h1.font" ) );
+        label_descrizione.setFont( UIManager.getFont( "default.font" ) );
+
+        JLabel label_username = new JLabel("Username");
+        JTextField field_username = new JTextField(FIELD_SIZE_L);
+
+        JLabel label_titoloOpera = new JLabel("Titolo opera");
+        JTextField field_titoloOpera = new JTextField(FIELD_SIZE_L);
+        /* 
+        JXDatePicker pickerData = new JXDatePicker ();
+        pickerData.setDate (Calendar.getInstance ().getTime ());
+        pickerData.setFormats (new SimpleDateFormat ("dd/MM/yyyy"));
+        */
+        JLabel label_voto = new JLabel("Voto");
+        JTextField field_voto = new JTextField(FIELD_SIZE_L);
+
+        JLabel label_descrizioneRecensione = new JLabel("Descrizione");
+        JTextField field_descrizioneRecensione = new JTextField(FIELD_SIZE_L);
+
+        JLabel label_preferito = new JLabel("Preferito");
+        JRadioButton preferitoSi = new JRadioButton("Si");
+        preferitoSi.setActionCommand("true");
+        JRadioButton preferitoNo = new JRadioButton("No");
+        preferitoNo.setActionCommand("false");
+        preferitoNo.setSelected(true);
+
+        ButtonGroup preferitoGroup = new ButtonGroup();
+        preferitoGroup.add(preferitoSi);
+        preferitoGroup.add(preferitoNo);  
+
+        JLabel label_spoiler = new JLabel("Spoiler");
+        JRadioButton spoilerSi = new JRadioButton("Si");
+        spoilerSi.setActionCommand("true");
+        JRadioButton spoilerNo = new JRadioButton("No");
+        spoilerNo.setActionCommand("false");
+        spoilerNo.setSelected(true);
+
+        ButtonGroup spoilerGroup = new ButtonGroup();
+        spoilerGroup.add(spoilerSi);
+        spoilerGroup.add(spoilerNo);  
+
+        JButton submitShowOpere = new JButton("Elenco opere");
+        submitShowOpere.addActionListener(e -> {
+            database.createConnection();
+            String opere = database.showOpere();
+            database.closeConnection();
+            console.setText(opere);
+        });
+
+        JButton submit = new JButton("Inserisci");
+        submit.addActionListener(e -> {
+            SimpleDateFormat desiredFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String data = desiredFormat.format(Calendar.getInstance ().getTime());
+            String result = null;
+            Boolean preferito = preferitoSi.isSelected();
+            Boolean spoiler = spoilerSi.isSelected();
+
+            if (field_username.getText().equals("") || field_titoloOpera.getText().equals("") || field_voto.getText().equals("") || field_descrizioneRecensione.getText().equals("") ) {
+                result = "Campo vuoto";
+            } else {
+                database.createConnection();
+                result = database.insertRecensione(field_username.getText(), field_titoloOpera.getText(), data, Float.parseFloat(field_voto.getText()), field_descrizioneRecensione.getText(), preferito, spoiler);
+                database.closeConnection();
+            }
+            System.out.println(result);
+            console.setText(result);
+        });
+        panel.add(label_titolo);
+        layout.putConstraint(SpringLayout.WEST, label_titolo,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_titolo,BORDER_EXT, SpringLayout.NORTH, panel);
+        panel.add(label_descrizione);
+        layout.putConstraint(SpringLayout.WEST, label_descrizione,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_descrizione,GAP_MID, SpringLayout.SOUTH, label_titolo);
+
+        panel.add(label_username);
+        panel.add(field_username);
+        layout.putConstraint(SpringLayout.WEST, label_username,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_username,GAP_MID,SpringLayout.SOUTH, label_descrizione);
+        layout.putConstraint(SpringLayout.WEST, field_username,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, field_username,GAP_SMALL,SpringLayout.SOUTH, label_username);
+
+        panel.add(label_titoloOpera);
+        panel.add(field_titoloOpera);
+        layout.putConstraint(SpringLayout.WEST, label_titoloOpera,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_titoloOpera,GAP_MID,SpringLayout.SOUTH, field_username);
+        layout.putConstraint(SpringLayout.WEST, field_titoloOpera,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, field_titoloOpera,GAP_SMALL,SpringLayout.SOUTH, label_titoloOpera);
+
+        panel.add(label_voto);
+        panel.add(field_voto);
+        layout.putConstraint(SpringLayout.WEST, label_voto,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_voto,GAP_MID,SpringLayout.SOUTH, field_titoloOpera);
+        layout.putConstraint(SpringLayout.WEST, field_voto,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, field_voto,GAP_SMALL,SpringLayout.SOUTH, label_voto);
+
+        panel.add(label_descrizioneRecensione);
+        panel.add(field_descrizioneRecensione);
+        layout.putConstraint(SpringLayout.WEST, label_descrizioneRecensione,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_descrizioneRecensione,GAP_MID,SpringLayout.SOUTH, field_voto);
+        layout.putConstraint(SpringLayout.WEST, field_descrizioneRecensione,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, field_descrizioneRecensione,GAP_SMALL,SpringLayout.SOUTH, label_descrizioneRecensione);
+
+        panel.add(label_preferito);
+        panel.add(preferitoSi);
+        panel.add(preferitoNo);
+        layout.putConstraint(SpringLayout.WEST, label_preferito,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_preferito,GAP_MID,SpringLayout.SOUTH, field_descrizioneRecensione);
+        layout.putConstraint(SpringLayout.WEST, preferitoSi,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, preferitoSi,GAP_SMALL,SpringLayout.SOUTH, label_preferito);
+        layout.putConstraint(SpringLayout.WEST, preferitoNo,40,SpringLayout.WEST, preferitoSi);
+        layout.putConstraint(SpringLayout.NORTH, preferitoNo,GAP_SMALL,SpringLayout.SOUTH, label_preferito);
+
+
+        panel.add(label_spoiler);
+        panel.add(spoilerSi);
+        panel.add(spoilerNo);
+        layout.putConstraint(SpringLayout.WEST, label_spoiler,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_spoiler,GAP_MID,SpringLayout.SOUTH, preferitoSi);
+        layout.putConstraint(SpringLayout.WEST, spoilerSi,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, spoilerSi,GAP_SMALL,SpringLayout.SOUTH, label_spoiler);
+        layout.putConstraint(SpringLayout.WEST, spoilerNo,40,SpringLayout.WEST, spoilerSi);
+        layout.putConstraint(SpringLayout.NORTH, spoilerNo,GAP_SMALL,SpringLayout.SOUTH, label_spoiler);
+
+        panel.add(submitShowOpere);
+        layout.putConstraint(SpringLayout.WEST, submitShowOpere,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, submitShowOpere,GAP_MID,SpringLayout.SOUTH, spoilerSi);
 
         panel.add(submit);
         layout.putConstraint(SpringLayout.WEST, submit,BORDER_EXT,SpringLayout.WEST, submitShowOpere);
