@@ -162,8 +162,153 @@ public class DatabaseManager {
         
         return checkResult(resultString);
     }
-        
-    public String insertAttore(String nome, String cognome, String immagine, String dataDiNascita, String dataDiMorte, String titolo, String personaggio) {
+
+    /*
+    public String insertOpera(String durata, String titolo, String descrizione, String locandina, String dataDiUscita, String classificazione, String genere, String nome, String cognome, String immagine, String dataDiNascita, String dataDiMorte, String ruolo){
+        int idOpera = -1;
+        int idGenere = -1;
+        String resultString = "";
+        PreparedStatement stmt = null;
+        ResultSet result = null;
+
+        try {
+            stmt = connection.prepareStatement("INSERT INTO reviewit.opera\n" + //
+                    "\t(tipo, durata, titolo, descrizione, locandina, dataDiUscita, classificazione)\n" + //
+                    "\tVALUES (0, ?, ?, ?, ?, ?, ?)");
+            stmt.setString(1,durata);
+            stmt.setString(2,titolo);
+            stmt.setString(3,descrizione);
+            stmt.setString(4,locandina);
+            stmt.setString(5,dataDiUscita);
+            stmt.setString(6,classificazione);
+    
+            stmt.executeUpdate();
+
+        }catch (SQLException e) {
+                resultString = "Esecuzione query 1 fallita";
+                return resultString;
+        }
+
+        try {
+            stmt = connection.prepareStatement("SELECT o.id\n" + //
+                    "FROM opera o\n" + //
+                    "WHERE o.titolo LIKE ?");
+            stmt.setString(1,titolo);
+    
+            result = stmt.executeQuery();
+            if(result.next()){
+                idOpera = result.getInt("id");
+            }
+
+        }catch (SQLException e) {
+                resultString = "Esecuzione query 2 fallita";
+                return resultString;
+        }
+
+        try {
+            stmt = connection.prepareStatement("SELECT g.id\n" + //
+                    "FROM genere g\n" + //
+                    "WHERE g.nome LIKE ?");
+            stmt.setString(1,genere);
+    
+            result = stmt.executeQuery();
+            if(result.next()){
+                idGenere = result.getInt("id");
+            }
+
+        }catch (SQLException e) {
+                resultString = "Esecuzione query 3 fallita";
+                return resultString;
+        }
+
+        try {
+            stmt = connection.prepareStatement("INSERT INTO reviewit.appartenenza\n" + //
+                    "\t(operaId, genereId)\n" + //
+                    "    VALUES(?, ?)");
+            stmt.setInt(1,idOpera);
+            stmt.setInt(2,idGenere);
+    
+            stmt.executeUpdate();
+
+        }catch (SQLException e) {
+                resultString = "Esecuzione query 4 fallita";
+                return resultString;
+        }
+    }
+*/
+    public String insertAttore(String resultString, int idLavoratore, String personaggio, String titolo){
+        PreparedStatement stmt = null;
+        ResultSet result = null;
+
+        try{
+            stmt = connection.prepareStatement("INSERT INTO reviewit.attore\n" + //
+                    "\t(lavoratoreId)\n" + //
+                    "\tVALUES(?)");
+            stmt.setInt(1,idLavoratore);
+            stmt.executeUpdate();
+
+        }catch (SQLException e) {
+            resultString = "Esecuzione query insertAttore 1 fallita";
+            return resultString;
+        }
+
+        try{
+            stmt = connection.prepareStatement("INSERT INTO reviewit.recitazione\n" + //
+                    "\t(operaId, attoreId, nomePersonaggio)\n" + //
+                    "SELECT o.id, (?), (?)\n" + //
+                    "FROM opera o\n" + //
+                    "WHERE titolo LIKE ?");
+            stmt.setInt(1,idLavoratore);
+            stmt.setString(2,personaggio);
+            stmt.setString(3,titolo + "%");
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            resultString = "Esecuzione query insertAttore 2 fallita";
+            return resultString;
+        }
+
+        resultString = "Inserimento lavoratore avvenuto con successo";
+        return resultString;
+    }
+
+    public String insertMembroCrew(String resultString, int idLavoratore, String ruolo, String titolo){
+        PreparedStatement stmt = null;
+        ResultSet result = null;
+
+        try{
+            stmt = connection.prepareStatement("INSERT INTO reviewit.membrocrew\n" + //
+                    "\t(lavoratoreId)\n" + //
+                    "VALUES (?)");
+            stmt.setInt(1,idLavoratore);
+            stmt.executeUpdate();
+
+        }catch (SQLException e) {
+            resultString = "Esecuzione query insertMembroCrew 1 fallita";
+            return resultString;
+        }
+
+        try{
+            stmt = connection.prepareStatement("INSERT INTO reviewit.partecipazione\n" + //
+                    "\t(operaId, membroCrewId, ruolo)\n" + //
+                    "SELECT o.id, ?, ?\n" + //
+                    "FROM opera o\n" + //
+                    "WHERE titolo LIKE ?");
+            stmt.setInt(1,idLavoratore);
+            stmt.setString(2,ruolo);
+            stmt.setString(3,titolo + "%");
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            resultString = "Esecuzione query insertMembroCrew 2 fallita";
+            return resultString;
+        }
+
+        resultString = "Inserimento lavoratore avvenuto con successo";
+        return resultString;
+    }
+
+    public String insertLavoratore(String nome, String cognome, String immagine, String dataDiNascita, String dataDiMorte, String titolo, String personaggio, String ruolo) {
         int idLavoratore = -1;
         String resultString = "";
         PreparedStatement stmt = null;
@@ -186,7 +331,7 @@ public class DatabaseManager {
             stmt.executeUpdate();
 
         }catch (SQLException e) {
-                resultString = "Esecuzione query 1.1 fallita";
+                resultString = "Esecuzione query 1 fallita";
                 return resultString;
         }
 
@@ -203,42 +348,17 @@ public class DatabaseManager {
                 idLavoratore = result.getInt("id");
             }
         }catch (SQLException e) {
-                resultString = "Esecuzione query 1.2 fallita";
+                resultString = "Esecuzione query 2 fallita";
                 return resultString;
         }
 
-        try{
-
-            stmt = connection.prepareStatement("INSERT INTO reviewit.attore\n" + //
-                    "\t(lavoratoreId)\n" + //
-                    "\tVALUES(?)");
-            stmt.setInt(1,idLavoratore);
-            stmt.executeUpdate();
-
-        }catch (SQLException e) {
-            resultString = "Esecuzione query 1.3 fallita";
-            return resultString;
+        if(!(personaggio.equals(""))){
+            resultString = insertAttore(resultString, idLavoratore, personaggio, titolo);
+        }
+        if(!(ruolo.equals(""))){
+            resultString = insertMembroCrew(resultString, idLavoratore, ruolo, titolo);
         }
 
-        try{
-
-            System.out.println("idLavoratore: " + idLavoratore + " personaggio: " + personaggio + " titolo: " + titolo);
-
-            stmt = connection.prepareStatement("INSERT INTO reviewit.recitazione\n" + //
-                    "\t(operaId, attoreId, nomePersonaggio)\n" + //
-                    "SELECT o.id, (?), (?)\n" + //
-                    "FROM opera o\n" + //
-                    "WHERE titolo LIKE ?");
-            stmt.setInt(1,idLavoratore);
-            stmt.setString(2,personaggio);
-            stmt.setString(3,titolo + "%");
-            stmt.executeUpdate();
-
-            resultString = "Inserimento lavoratore avvenuto con successo";
-        } catch (SQLException e) {
-            resultString = "Esecuzione query 1 fallita";
-            return resultString;
-        }
         return checkResult(resultString);
     }
 

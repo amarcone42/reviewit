@@ -133,7 +133,6 @@ public class Dashboard extends JFrame {
 
         JLabel label_dataMorte = new JLabel("Data morte");
         JXDatePicker pickerDataMorte = new JXDatePicker ();
-        //pickerDataMorte.setDate (Calendar.getInstance ().getTime ());
         pickerDataMorte.setFormats (new SimpleDateFormat ("dd/MM/yyyy"));
 
         JLabel label_titoloOpera = new JLabel("Titolo opera");
@@ -142,6 +141,8 @@ public class Dashboard extends JFrame {
         JLabel label_personaggio = new JLabel("personaggio");
         JTextField field_personaggio = new JTextField(FIELD_SIZE_L);
 
+        JLabel label_ruolo = new JLabel("ruolo");
+        JTextField field_ruolo = new JTextField(FIELD_SIZE_L);
 
         JButton submitShowOpere = getShowOpereButton();
 
@@ -160,11 +161,11 @@ public class Dashboard extends JFrame {
 
             String result = null;
 
-            if (dataNascita.equals("") || field_nome.getText().equals("") || field_cognome.getText().equals("") || field_immagine.getText().equals("") ||  field_titoloOpera.getText().equals("") || field_personaggio.getText().equals("")) {
+            if (dataNascita.equals("") || field_nome.getText().equals("") || field_cognome.getText().equals("") || field_immagine.getText().equals("") ||  field_titoloOpera.getText().equals("") || (field_personaggio.getText().equals("") && field_ruolo.getText().equals(""))){
                 result = "Campo vuoto";
             } else {
                 database.createConnection();
-                result = database.insertAttore(field_nome.getText(), field_cognome.getText(), field_immagine.getText(), dataNascita, dataMorte, field_titoloOpera.getText(), field_personaggio.getText());
+                result = database.insertLavoratore(field_nome.getText(), field_cognome.getText(), field_immagine.getText(), dataNascita, dataMorte, field_titoloOpera.getText(), field_personaggio.getText(), field_ruolo.getText());
                 database.closeConnection();
             }
             System.out.println(result);
@@ -226,9 +227,16 @@ public class Dashboard extends JFrame {
         layout.putConstraint(SpringLayout.WEST, field_personaggio,BORDER_EXT,SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.NORTH, field_personaggio,GAP_SMALL,SpringLayout.SOUTH, label_personaggio);
 
+        panel.add(label_ruolo);
+        panel.add(field_ruolo);
+        layout.putConstraint(SpringLayout.WEST, label_ruolo,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_ruolo,GAP_MID,SpringLayout.SOUTH, field_personaggio);
+        layout.putConstraint(SpringLayout.WEST, field_ruolo,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, field_ruolo,GAP_SMALL,SpringLayout.SOUTH, label_ruolo);
+
         panel.add(submitShowOpere);
         layout.putConstraint(SpringLayout.WEST, submitShowOpere,BORDER_EXT,SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.NORTH, submitShowOpere,GAP_MID,SpringLayout.SOUTH, field_personaggio);
+        layout.putConstraint(SpringLayout.NORTH, submitShowOpere,GAP_MID,SpringLayout.SOUTH, field_ruolo);
 
         panel.add(submit);
         layout.putConstraint(SpringLayout.WEST, submit,BORDER_EXT,SpringLayout.WEST, panel);
