@@ -59,6 +59,7 @@ public class Dashboard extends JFrame {
         JTabbedPane tabbedPane = new JTabbedPane(1);
         tabbedPane.setForeground(getForeground());
 
+        tabbedPane.addTab("OP1", operazione01());
         tabbedPane.addTab("OP2", operazione02());
         tabbedPane.addTab("OP3", operazione03());
         tabbedPane.addTab("OP4", operazione04());
@@ -105,6 +106,204 @@ public class Dashboard extends JFrame {
         });
 
         return submitShowOpere;
+    }
+
+    public JPanel operazione01() {
+        JPanel panel = new JPanel();
+        SpringLayout layout = new SpringLayout();
+        panel.setLayout(layout);
+
+        JLabel label_titolo = new JLabel("Operazione 01");
+        JLabel label_descrizione = new JLabel("Inserimento di un film");
+        label_titolo.setFont( UIManager.getFont( "h1.font" ) );
+        label_descrizione.setFont( UIManager.getFont( "default.font" ) );
+
+        JLabel label_Durata = new JLabel("Durata");
+        JTextField field_Durata = new JTextField(FIELD_SIZE_L);
+
+        JLabel label_titoloOpera = new JLabel("Titolo opera");
+        JTextField field_titoloOpera = new JTextField(FIELD_SIZE_L);
+
+        JLabel label_descrizioneFilm = new JLabel("Descrizione");
+        JTextField field_descrizioneFilm = new JTextField(FIELD_SIZE_L);
+
+        JLabel label_Locandina = new JLabel("Locandina");
+        JTextField field_Locandina = new JTextField(FIELD_SIZE_L);
+
+        JLabel label_dataUscita = new JLabel("Data uscita");
+        JXDatePicker pickerDataUscita = new JXDatePicker ();
+        pickerDataUscita.setDate (Calendar.getInstance ().getTime ());
+        pickerDataUscita.setFormats (new SimpleDateFormat ("dd/MM/yyyy"));
+
+        JLabel label_Classificazione = new JLabel("Classificazione");
+        JTextField field_Classificazione = new JTextField(FIELD_SIZE_L);
+
+        JLabel label_Genere = new JLabel("Genere");
+        JTextField field_Genere = new JTextField(FIELD_SIZE_L);
+
+        //
+
+        JLabel label_nome = new JLabel("Nome");
+        JTextField field_nome = new JTextField(FIELD_SIZE_L);
+
+        JLabel label_cognome = new JLabel("Cognome");
+        JTextField field_cognome = new JTextField(FIELD_SIZE_L);
+
+        JLabel label_immagine = new JLabel("Immagine");
+        JTextField field_immagine = new JTextField(FIELD_SIZE_L);
+
+        JLabel label_dataNascita = new JLabel("Data nascita");
+        JXDatePicker pickerDataNascita = new JXDatePicker ();
+        pickerDataNascita.setDate (Calendar.getInstance ().getTime ());
+        pickerDataNascita.setFormats (new SimpleDateFormat ("dd/MM/yyyy"));
+
+        JLabel label_dataMorte = new JLabel("Data morte");
+        JXDatePicker pickerDataMorte = new JXDatePicker ();
+        pickerDataMorte.setFormats (new SimpleDateFormat ("dd/MM/yyyy"));
+
+        JLabel label_ruolo = new JLabel("ruolo");
+        JTextField field_ruolo = new JTextField(FIELD_SIZE_L);
+
+        JButton submitShowOpere = getShowOpereButton();
+
+        JButton submit = new JButton("Inserisci");
+        submit.addActionListener(e -> {
+            SimpleDateFormat desiredFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String dataUscita = "";
+            String dataNascita = "";
+            String dataMorte = "";
+
+            if(pickerDataUscita.getDate() != null){
+                dataUscita = desiredFormat.format(pickerDataUscita.getDate());
+            }
+            if(pickerDataNascita.getDate() != null){
+                dataNascita = desiredFormat.format(pickerDataNascita.getDate());
+            }
+            if(pickerDataMorte.getDate() != null){
+                dataMorte = desiredFormat.format(pickerDataMorte.getDate());
+            }
+
+
+            String result = null;
+
+            if (field_Durata.getText().equals("") || field_titoloOpera.getText().equals("") || field_descrizioneFilm.getText().equals("") || field_Locandina.getText().equals("") || dataUscita.equals("") || field_Classificazione.getText().equals("") || field_Genere.getText().equals("") || dataNascita.equals("") || field_nome.getText().equals("") || field_cognome.getText().equals("") || field_immagine.getText().equals("") ||  field_titoloOpera.getText().equals("") ||  field_ruolo.getText().equals("")){
+                result = "Campo vuoto";
+            } else {
+                database.createConnection();
+                result = database.insertOpera(field_Durata.getText(), field_titoloOpera.getText(), field_descrizioneFilm.getText(), field_Locandina.getText(), dataUscita, field_Classificazione.getText(), field_Genere.getText(), field_nome.getText(), field_cognome.getText(), field_immagine.getText(), dataNascita, dataMorte, field_ruolo.getText());
+                database.closeConnection();
+            }
+            System.out.println(result);
+            console.setText(result);
+        });
+        
+        panel.add(label_titolo);
+        layout.putConstraint(SpringLayout.WEST, label_titolo,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_titolo,BORDER_EXT, SpringLayout.NORTH, panel);
+        panel.add(label_descrizione);
+        layout.putConstraint(SpringLayout.WEST, label_descrizione,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_descrizione,GAP_MID, SpringLayout.SOUTH, label_titolo);
+
+        panel.add(label_Durata);
+        panel.add(field_Durata);
+        layout.putConstraint(SpringLayout.WEST, label_Durata,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_Durata,GAP_MID,SpringLayout.SOUTH, label_descrizione);
+        layout.putConstraint(SpringLayout.WEST, field_Durata,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, field_Durata,GAP_SMALL,SpringLayout.SOUTH, label_Durata);
+
+        panel.add(label_titoloOpera);
+        panel.add(field_titoloOpera);
+        layout.putConstraint(SpringLayout.WEST, label_titoloOpera,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_titoloOpera,GAP_MID,SpringLayout.SOUTH, field_Durata);
+        layout.putConstraint(SpringLayout.WEST, field_titoloOpera,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, field_titoloOpera,GAP_SMALL,SpringLayout.SOUTH, label_titoloOpera);
+
+        panel.add(label_descrizioneFilm);
+        panel.add(field_descrizioneFilm);
+        layout.putConstraint(SpringLayout.WEST, label_descrizioneFilm,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_descrizioneFilm,GAP_MID,SpringLayout.SOUTH, field_titoloOpera);
+        layout.putConstraint(SpringLayout.WEST, field_descrizioneFilm,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, field_descrizioneFilm,GAP_SMALL,SpringLayout.SOUTH, label_descrizioneFilm);
+
+        panel.add(label_Locandina);
+        panel.add(field_Locandina);
+        layout.putConstraint(SpringLayout.WEST, label_Locandina,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_Locandina,GAP_MID,SpringLayout.SOUTH, field_descrizioneFilm);
+        layout.putConstraint(SpringLayout.WEST, field_Locandina,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, field_Locandina,GAP_SMALL,SpringLayout.SOUTH, label_Locandina);
+
+        panel.add(label_dataUscita);
+        panel.add(pickerDataUscita);
+        layout.putConstraint(SpringLayout.WEST, label_dataUscita,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_dataUscita,GAP_MID,SpringLayout.SOUTH, field_Locandina);
+        layout.putConstraint(SpringLayout.WEST, pickerDataUscita,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, pickerDataUscita,GAP_SMALL,SpringLayout.SOUTH, label_dataUscita);
+
+        panel.add(label_Classificazione);
+        panel.add(field_Classificazione);
+        layout.putConstraint(SpringLayout.WEST, label_Classificazione,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_Classificazione,GAP_MID,SpringLayout.SOUTH, pickerDataUscita);
+        layout.putConstraint(SpringLayout.WEST, field_Classificazione,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, field_Classificazione,GAP_SMALL,SpringLayout.SOUTH, label_Classificazione);
+        
+        panel.add(label_Genere);
+        panel.add(field_Genere);
+        layout.putConstraint(SpringLayout.WEST, label_Genere,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_Genere,GAP_MID,SpringLayout.SOUTH, field_Classificazione);
+        layout.putConstraint(SpringLayout.WEST, field_Genere,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, field_Genere,GAP_SMALL,SpringLayout.SOUTH, label_Genere);
+
+        panel.add(label_nome);
+        panel.add(field_nome);
+        layout.putConstraint(SpringLayout.WEST, label_nome,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_nome,GAP_MID,SpringLayout.SOUTH, field_Genere);
+        layout.putConstraint(SpringLayout.WEST, field_nome,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, field_nome,GAP_SMALL,SpringLayout.SOUTH, label_nome);
+
+        panel.add(label_cognome);
+        panel.add(field_cognome);
+        layout.putConstraint(SpringLayout.WEST, label_cognome,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_cognome,GAP_MID,SpringLayout.SOUTH, field_nome);
+        layout.putConstraint(SpringLayout.WEST, field_cognome,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, field_cognome,GAP_SMALL,SpringLayout.SOUTH, label_cognome);
+
+        panel.add(label_immagine);
+        panel.add(field_immagine);
+        layout.putConstraint(SpringLayout.WEST, label_immagine,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_immagine,GAP_MID,SpringLayout.SOUTH, field_cognome);
+        layout.putConstraint(SpringLayout.WEST, field_immagine,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, field_immagine,GAP_SMALL,SpringLayout.SOUTH, label_immagine);
+
+        panel.add(label_dataNascita);
+        panel.add(pickerDataNascita);
+        layout.putConstraint(SpringLayout.WEST, label_dataNascita,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_dataNascita,GAP_MID,SpringLayout.SOUTH, field_immagine);
+        layout.putConstraint(SpringLayout.WEST, pickerDataNascita,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, pickerDataNascita,GAP_SMALL,SpringLayout.SOUTH, label_dataNascita);
+
+        panel.add(label_dataMorte);
+        panel.add(pickerDataMorte);
+        layout.putConstraint(SpringLayout.WEST, label_dataMorte,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_dataMorte,GAP_MID,SpringLayout.SOUTH, pickerDataNascita);
+        layout.putConstraint(SpringLayout.WEST, pickerDataMorte,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, pickerDataMorte,GAP_SMALL,SpringLayout.SOUTH, label_dataMorte);
+
+        panel.add(label_ruolo);
+        panel.add(field_ruolo);
+        layout.putConstraint(SpringLayout.WEST, label_ruolo,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_ruolo,GAP_MID,SpringLayout.SOUTH, pickerDataMorte);
+        layout.putConstraint(SpringLayout.WEST, field_ruolo,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, field_ruolo,GAP_SMALL,SpringLayout.SOUTH, label_ruolo);
+
+        panel.add(submitShowOpere);
+        layout.putConstraint(SpringLayout.WEST, submitShowOpere,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, submitShowOpere,GAP_MID,SpringLayout.SOUTH, field_ruolo);
+
+        panel.add(submit);
+        layout.putConstraint(SpringLayout.WEST, submit,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, submit,GAP_MID,SpringLayout.SOUTH, submitShowOpere);
+        
+        return panel;
     }
 
     public JPanel operazione02() {
@@ -171,6 +370,7 @@ public class Dashboard extends JFrame {
             System.out.println(result);
             console.setText(result);
         });
+
         panel.add(label_titolo);
         layout.putConstraint(SpringLayout.WEST, label_titolo,BORDER_EXT,SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.NORTH, label_titolo,BORDER_EXT, SpringLayout.NORTH, panel);

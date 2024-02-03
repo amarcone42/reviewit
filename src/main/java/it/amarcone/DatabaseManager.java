@@ -163,7 +163,7 @@ public class DatabaseManager {
         return checkResult(resultString);
     }
 
-    /*
+
     public String insertOpera(String durata, String titolo, String descrizione, String locandina, String dataDiUscita, String classificazione, String genere, String nome, String cognome, String immagine, String dataDiNascita, String dataDiMorte, String ruolo){
         int idOpera = -1;
         int idGenere = -1;
@@ -234,8 +234,11 @@ public class DatabaseManager {
                 resultString = "Esecuzione query 4 fallita";
                 return resultString;
         }
+
+        resultString = insertLavoratore(nome, cognome, immagine, dataDiNascita, dataDiMorte, titolo, "", ruolo);
+        return checkResult(resultString);
     }
-*/
+
     public String insertAttore(String resultString, int idLavoratore, String personaggio, String titolo){
         PreparedStatement stmt = null;
         ResultSet result = null;
