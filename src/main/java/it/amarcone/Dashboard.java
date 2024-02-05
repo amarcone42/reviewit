@@ -69,6 +69,7 @@ public class Dashboard extends JFrame {
         tabbedPane.addTab("OP8", operazione08());
         tabbedPane.addTab("OP9", operazione09());
         tabbedPane.addTab("OP11", operazione11());
+        tabbedPane.addTab("OP12", operazione12());
         tabbedPane.addTab("OP13", operazione13());
         tabbedPane.addTab("OP14", operazione14());
         tabbedPane.addTab("OP15", operazione15());
@@ -1027,6 +1028,74 @@ public class Dashboard extends JFrame {
         panel.add(submit);
         layout.putConstraint(SpringLayout.WEST, submit,BORDER_EXT,SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.NORTH, submit,GAP_MID,SpringLayout.SOUTH, field_username);
+
+        return panel;
+    }
+
+    public JPanel operazione12() {
+        JPanel panel = new JPanel();
+        SpringLayout layout = new SpringLayout();
+        panel.setLayout(layout);
+
+        JLabel label_titolo = new JLabel("Operazione 12");
+        JLabel label_descrizione = new JLabel("Ordinare le recensioni per voto");
+        label_titolo.setFont( UIManager.getFont( "h1.font" ) );
+        label_descrizione.setFont( UIManager.getFont( "default.font" ) );
+
+        JLabel label_titoloOpera = new JLabel("Titolo");
+        JTextField field_titoloOpera = new JTextField(FIELD_SIZE_L);
+
+        JLabel label_ordinamento = new JLabel("Ordinamento");
+        JRadioButton ascendente = new JRadioButton("Ascendente");
+        ascendente.setActionCommand("true");
+        ascendente.setSelected(true);
+        JRadioButton discendente = new JRadioButton("Discendente");
+        discendente.setActionCommand("false");
+
+        ButtonGroup preferitoGroup = new ButtonGroup();
+        preferitoGroup.add(ascendente);
+        preferitoGroup.add(discendente);  
+
+        JButton submit = new JButton("Ordina");
+        submit.addActionListener(e -> {
+            String result;
+            if (field_titoloOpera.getText().equals("")) {
+                result = "Campo vuoto";
+            } else {
+                database.createConnection();
+                result = database.viewRecensioniOrderedByVoto(field_titoloOpera.getText(), ascendente.isSelected());
+                database.closeConnection();
+            }
+            System.out.println("Le recensioni ordinate sono:\n" + result);
+            console.setText("Le recensioni ordinate sono:\n" + result);
+        });
+        panel.add(label_titolo);
+        layout.putConstraint(SpringLayout.WEST, label_titolo,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_titolo,BORDER_EXT, SpringLayout.NORTH, panel);
+        panel.add(label_descrizione);
+        layout.putConstraint(SpringLayout.WEST, label_descrizione,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_descrizione,GAP_MID, SpringLayout.SOUTH, label_titolo);
+        
+        panel.add(label_titoloOpera);
+        panel.add(field_titoloOpera);
+        layout.putConstraint(SpringLayout.WEST, label_titoloOpera,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_titoloOpera,GAP_MID,SpringLayout.SOUTH, label_descrizione);
+        layout.putConstraint(SpringLayout.WEST, field_titoloOpera,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, field_titoloOpera,GAP_SMALL,SpringLayout.SOUTH, label_titoloOpera);
+
+        panel.add(label_ordinamento);
+        panel.add(ascendente);
+        panel.add(discendente);
+        layout.putConstraint(SpringLayout.WEST, label_ordinamento,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_ordinamento,GAP_MID,SpringLayout.SOUTH, field_titoloOpera);
+        layout.putConstraint(SpringLayout.WEST, ascendente,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, ascendente,GAP_SMALL,SpringLayout.SOUTH, label_ordinamento);
+        layout.putConstraint(SpringLayout.WEST, discendente,100,SpringLayout.WEST, ascendente);
+        layout.putConstraint(SpringLayout.NORTH, discendente,GAP_SMALL,SpringLayout.SOUTH, label_ordinamento);
+
+        panel.add(submit);
+        layout.putConstraint(SpringLayout.WEST, submit,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, submit,GAP_MID,SpringLayout.SOUTH, discendente);
 
         return panel;
     }

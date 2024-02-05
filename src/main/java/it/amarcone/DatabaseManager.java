@@ -587,6 +587,49 @@ public class DatabaseManager {
         return -1;
     }
 
+    public String viewRecensioniOrderedByVoto(String titolo, boolean ascendente) {
+        PreparedStatement stmt = null;
+        ResultSet result = null;
+        int idOpera = -1;
+        String resultString = "";
+        try {
+            stmt = connection.prepareStatement("SELECT o.id\n" + //
+                    "FROM opera o\n" + //
+                    "WHERE o.titolo LIKE ?");
+            stmt.setString(1,titolo+"%");
+    
+            result = stmt.executeQuery();
+            if(result.next()){
+                idOpera = result.getInt("id");
+            }
+
+        }catch (SQLException e) {
+                resultString = "Esecuzione query 1 fallita";
+                return resultString;
+        }
+        try {
+            stmt = connection.prepareStatement("SELECT r.*, o.titolo\r\n" + //
+                                "FROM opera o INNER JOIN recensione r ON o.id=r.operaId\r\n" + //
+                                "WHERE\to.id=? AND r.voto IS NOT NULL\r\n" + //
+                                "GROUP BY r.profiloId, r.operaId\r\n" + //
+                                "ORDER BY r.voto " + (ascendente?"ASC":"DESC"));
+            stmt.setInt(1,idOpera);
+            result = stmt.executeQuery();
+            while (result.next()) {
+                resultString = resultString.concat("profilo: " + result.getString("profiloId") + "\n");
+                resultString = resultString.concat("titolo: " + result.getString("titolo") + "\n");
+                resultString = resultString.concat("data: " + result.getDate("data") + "\n");
+                resultString = resultString.concat("voto: " + result.getFloat("voto") + "\n");
+                resultString = resultString.concat("descrizione: " + result.getString("descrizione") + "\n");
+                resultString = resultString.concat("preferito: " + result.getBoolean("preferito") + "\n");
+                resultString = resultString.concat("spoiler: " + result.getBoolean("spoiler") + "\n\n");
+            }
+        } catch (SQLException e) {
+            resultString = "Esecuzione query 2 fallita";
+        }
+        return checkResult(resultString);  
+    }
+
     public String viewLavoratoriOrderByNumeroOpere() {
         String resultString = "";
         try {
