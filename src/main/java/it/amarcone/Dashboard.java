@@ -122,6 +122,7 @@ public class Dashboard extends JFrame {
 
         JLabel label_Durata = new JLabel("Durata");
         JTextField field_Durata = new JTextField(FIELD_SIZE_L);
+        field_Durata.setText("00:00:00");
 
         JLabel label_titoloOpera = new JLabel("Titolo opera");
         JTextField field_titoloOpera = new JTextField(FIELD_SIZE_L);
