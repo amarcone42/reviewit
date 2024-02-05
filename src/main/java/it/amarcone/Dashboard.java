@@ -41,7 +41,7 @@ public class Dashboard extends JFrame {
         setLocationByPlatform(true);
         setSize(900, 600);
         setResizable(true);
-        setMinimumSize(new Dimension(800, 600));
+        setMinimumSize(new Dimension(1600, 950));
 
         ImageIcon icon = new ImageIcon("src/main/resources/reviewit.png");
         setIconImage(icon.getImage());
