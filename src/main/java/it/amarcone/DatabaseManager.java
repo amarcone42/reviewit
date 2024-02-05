@@ -572,6 +572,46 @@ public class DatabaseManager {
         return -1;
     }
 
+    public String viewVotoMedio(String titolo) {
+        PreparedStatement stmt = null;
+        ResultSet result = null;
+        int idOpera = -1;
+        String resultString = "";
+
+        try {
+            stmt = connection.prepareStatement("SELECT o.id\n" + //
+                    "FROM opera o\n" + //
+                    "WHERE o.titolo LIKE ?");
+            stmt.setString(1,titolo+"%");
+    
+            result = stmt.executeQuery();
+            if(result.next()){
+                idOpera = result.getInt("id");
+            }
+
+        }catch (SQLException e) {
+                resultString = "Esecuzione query 1 fallita";
+                return resultString;
+        }
+
+        try{
+            stmt = connection.prepareStatement("SELECT titolo, votoMedio\n" + //
+                    "FROM opera\n" + //
+                    "WHERE id = ?;");
+            stmt.setInt(1, idOpera);
+            result = stmt.executeQuery();
+            if(result.next()){
+                resultString = resultString.concat(result.getString("titolo") + ": ");
+                resultString = resultString.concat(result.getFloat("votoMedio") + "\n\n");
+            }
+        }catch (SQLException e) {
+            resultString = "Esecuzione query fallita";
+        }
+
+        return checkResult(resultString);
+    }
+
+
     public int countFollowers(String username) {
         try {
             PreparedStatement stmt = connection.prepareStatement("SELECT COUNT(profiloSeguito) AS followers FROM seguire WHERE profiloSeguito = ?");
