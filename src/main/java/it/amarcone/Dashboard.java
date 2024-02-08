@@ -126,6 +126,9 @@ public class Dashboard extends JFrame {
         label_titolo.setFont( UIManager.getFont( "h1.font" ) );
         label_descrizione.setFont( UIManager.getFont( "default.font" ) );
 
+        JLabel label_opera = new JLabel("Dati film");
+        label_opera.setFont( UIManager.getFont( "h2.font" ) );
+
         JLabel label_Durata = new JLabel("Durata");
         JTextField field_Durata = new JTextField(FIELD_SIZE_S);
         field_Durata.setText("00:00:00");
@@ -151,7 +154,8 @@ public class Dashboard extends JFrame {
         JTextField field_Genere = new JTextField(FIELD_SIZE_L);
 
         //
-
+        JLabel label_lavoratore = new JLabel("Dati membro crew");
+        label_lavoratore.setFont( UIManager.getFont( "h2.font" ) );
         JLabel label_nome = new JLabel("Nome");
         JTextField field_nome = new JTextField(FIELD_SIZE_L);
 
@@ -213,17 +217,21 @@ public class Dashboard extends JFrame {
         layout.putConstraint(SpringLayout.WEST, label_descrizione,BORDER_EXT,SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.NORTH, label_descrizione,GAP_MID, SpringLayout.SOUTH, label_titolo);
 
+        panel.add(label_opera);
+        layout.putConstraint(SpringLayout.WEST, label_opera,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_opera,GAP_MID,SpringLayout.SOUTH, label_descrizione);
+
         panel.add(label_Durata);
         panel.add(field_Durata);
         layout.putConstraint(SpringLayout.WEST, label_Durata,BORDER_EXT,SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.NORTH, label_Durata,GAP_MID,SpringLayout.SOUTH, label_descrizione);
+        layout.putConstraint(SpringLayout.NORTH, label_Durata,GAP_MID,SpringLayout.SOUTH, label_opera);
         layout.putConstraint(SpringLayout.WEST, field_Durata,BORDER_EXT,SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.NORTH, field_Durata,GAP_SMALL,SpringLayout.SOUTH, label_Durata);
 
         panel.add(label_titoloOpera);
         panel.add(field_titoloOpera);
         layout.putConstraint(SpringLayout.WEST, label_titoloOpera,GAP_MID,SpringLayout.EAST, field_Durata);
-        layout.putConstraint(SpringLayout.NORTH, label_titoloOpera,GAP_MID,SpringLayout.SOUTH, label_descrizione);
+        layout.putConstraint(SpringLayout.NORTH, label_titoloOpera,GAP_MID,SpringLayout.SOUTH, label_opera);
         layout.putConstraint(SpringLayout.WEST, field_titoloOpera,BORDER_EXT,SpringLayout.EAST, field_Durata);
         layout.putConstraint(SpringLayout.NORTH, field_titoloOpera,GAP_SMALL,SpringLayout.SOUTH, label_titoloOpera);
 
@@ -262,10 +270,14 @@ public class Dashboard extends JFrame {
         layout.putConstraint(SpringLayout.WEST, field_Genere,GAP_MID,SpringLayout.EAST, field_Classificazione);
         layout.putConstraint(SpringLayout.NORTH, field_Genere,GAP_SMALL,SpringLayout.SOUTH, label_Genere);
 
+        panel.add(label_lavoratore);
+        layout.putConstraint(SpringLayout.WEST, label_lavoratore,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, label_lavoratore,GAP_MID,SpringLayout.SOUTH, field_Genere);
+
         panel.add(label_nome);
         panel.add(field_nome);
         layout.putConstraint(SpringLayout.WEST, label_nome,BORDER_EXT,SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.NORTH, label_nome,GAP_MID,SpringLayout.SOUTH, field_Genere);
+        layout.putConstraint(SpringLayout.NORTH, label_nome,GAP_MID,SpringLayout.SOUTH, label_lavoratore);
         layout.putConstraint(SpringLayout.WEST, field_nome,BORDER_EXT,SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.NORTH, field_nome,GAP_SMALL,SpringLayout.SOUTH, label_nome);
 
@@ -309,8 +321,8 @@ public class Dashboard extends JFrame {
         layout.putConstraint(SpringLayout.NORTH, submitShowOpere,GAP_MID,SpringLayout.SOUTH, field_ruolo);
 
         panel.add(submit);
-        layout.putConstraint(SpringLayout.WEST, submit,BORDER_EXT,SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.NORTH, submit,GAP_MID,SpringLayout.SOUTH, submitShowOpere);
+        layout.putConstraint(SpringLayout.WEST, submit,GAP_MID,SpringLayout.EAST, submitShowOpere);
+        layout.putConstraint(SpringLayout.NORTH, submit,GAP_MID,SpringLayout.SOUTH, field_ruolo);
         
         return panel;
     }
