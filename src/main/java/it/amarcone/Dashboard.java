@@ -14,21 +14,25 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 import org.jdesktop.swingx.JXDatePicker;
 
 public class Dashboard extends JFrame {
-    private final static int BORDER_EXT = 10;
+    private final static int BORDER_EXT = 15;
     private final static int GAP_BIG = 20;
     private final static int GAP_MID = 10;
     private final static int GAP_SMALL = 5;
+    private final static int FIELD_SIZE_XL = 32;
     private final static int FIELD_SIZE_L = 22;
     private final static int FIELD_SIZE_M = 11;
+    private final static int FIELD_SIZE_S = 6;
 
     private DatabaseManager database;
     private JPanel page;
@@ -41,7 +45,9 @@ public class Dashboard extends JFrame {
         setLocationByPlatform(true);
         setSize(900, 600);
         setResizable(true);
-        setMinimumSize(new Dimension(1600, 950));
+        setMinimumSize(new Dimension(1200, 750));
+        setExtendedState(JFrame.MAXIMIZED_BOTH); 
+        //setUndecorated(true);
 
         ImageIcon icon = new ImageIcon("src/main/resources/reviewit.png");
         setIconImage(icon.getImage());
@@ -121,14 +127,14 @@ public class Dashboard extends JFrame {
         label_descrizione.setFont( UIManager.getFont( "default.font" ) );
 
         JLabel label_Durata = new JLabel("Durata");
-        JTextField field_Durata = new JTextField(FIELD_SIZE_L);
+        JTextField field_Durata = new JTextField(FIELD_SIZE_S);
         field_Durata.setText("00:00:00");
 
         JLabel label_titoloOpera = new JLabel("Titolo opera");
         JTextField field_titoloOpera = new JTextField(FIELD_SIZE_L);
 
         JLabel label_descrizioneFilm = new JLabel("Descrizione");
-        JTextField field_descrizioneFilm = new JTextField(FIELD_SIZE_L);
+        JTextField field_descrizioneFilm = new JTextField(FIELD_SIZE_L + GAP_MID - 1);
 
         JLabel label_Locandina = new JLabel("Locandina");
         JTextField field_Locandina = new JTextField(FIELD_SIZE_L);
@@ -139,7 +145,7 @@ public class Dashboard extends JFrame {
         pickerDataUscita.setFormats (new SimpleDateFormat ("dd/MM/yyyy"));
 
         JLabel label_Classificazione = new JLabel("Classificazione");
-        JTextField field_Classificazione = new JTextField(FIELD_SIZE_L);
+        JTextField field_Classificazione = new JTextField(FIELD_SIZE_M);
 
         JLabel label_Genere = new JLabel("Genere");
         JTextField field_Genere = new JTextField(FIELD_SIZE_L);
@@ -155,16 +161,16 @@ public class Dashboard extends JFrame {
         JLabel label_immagine = new JLabel("Immagine");
         JTextField field_immagine = new JTextField(FIELD_SIZE_L);
 
-        JLabel label_dataNascita = new JLabel("Data nascita");
+        JLabel label_dataNascita = new JLabel("Data di nascita");
         JXDatePicker pickerDataNascita = new JXDatePicker ();
         pickerDataNascita.setDate (Calendar.getInstance ().getTime ());
         pickerDataNascita.setFormats (new SimpleDateFormat ("dd/MM/yyyy"));
 
-        JLabel label_dataMorte = new JLabel("Data morte");
+        JLabel label_dataMorte = new JLabel("Data di morte");
         JXDatePicker pickerDataMorte = new JXDatePicker ();
         pickerDataMorte.setFormats (new SimpleDateFormat ("dd/MM/yyyy"));
 
-        JLabel label_ruolo = new JLabel("ruolo");
+        JLabel label_ruolo = new JLabel("Ruolo");
         JTextField field_ruolo = new JTextField(FIELD_SIZE_L);
 
         JButton submitShowOpere = getShowOpereButton();
@@ -216,9 +222,9 @@ public class Dashboard extends JFrame {
 
         panel.add(label_titoloOpera);
         panel.add(field_titoloOpera);
-        layout.putConstraint(SpringLayout.WEST, label_titoloOpera,BORDER_EXT,SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.NORTH, label_titoloOpera,GAP_MID,SpringLayout.SOUTH, field_Durata);
-        layout.putConstraint(SpringLayout.WEST, field_titoloOpera,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, label_titoloOpera,GAP_MID,SpringLayout.EAST, field_Durata);
+        layout.putConstraint(SpringLayout.NORTH, label_titoloOpera,GAP_MID,SpringLayout.SOUTH, label_descrizione);
+        layout.putConstraint(SpringLayout.WEST, field_titoloOpera,BORDER_EXT,SpringLayout.EAST, field_Durata);
         layout.putConstraint(SpringLayout.NORTH, field_titoloOpera,GAP_SMALL,SpringLayout.SOUTH, label_titoloOpera);
 
         panel.add(label_descrizioneFilm);
@@ -237,9 +243,9 @@ public class Dashboard extends JFrame {
 
         panel.add(label_dataUscita);
         panel.add(pickerDataUscita);
-        layout.putConstraint(SpringLayout.WEST, label_dataUscita,BORDER_EXT,SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.NORTH, label_dataUscita,GAP_MID,SpringLayout.SOUTH, field_Locandina);
-        layout.putConstraint(SpringLayout.WEST, pickerDataUscita,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, label_dataUscita,GAP_MID,SpringLayout.EAST, field_Locandina);
+        layout.putConstraint(SpringLayout.NORTH, label_dataUscita,GAP_MID,SpringLayout.SOUTH, field_descrizioneFilm);
+        layout.putConstraint(SpringLayout.WEST, pickerDataUscita,GAP_MID,SpringLayout.EAST, field_Locandina);
         layout.putConstraint(SpringLayout.NORTH, pickerDataUscita,GAP_SMALL,SpringLayout.SOUTH, label_dataUscita);
 
         panel.add(label_Classificazione);
@@ -251,9 +257,9 @@ public class Dashboard extends JFrame {
         
         panel.add(label_Genere);
         panel.add(field_Genere);
-        layout.putConstraint(SpringLayout.WEST, label_Genere,BORDER_EXT,SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.NORTH, label_Genere,GAP_MID,SpringLayout.SOUTH, field_Classificazione);
-        layout.putConstraint(SpringLayout.WEST, field_Genere,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, label_Genere,GAP_MID,SpringLayout.EAST, field_Classificazione);
+        layout.putConstraint(SpringLayout.NORTH, label_Genere,GAP_MID,SpringLayout.SOUTH, pickerDataUscita);
+        layout.putConstraint(SpringLayout.WEST, field_Genere,GAP_MID,SpringLayout.EAST, field_Classificazione);
         layout.putConstraint(SpringLayout.NORTH, field_Genere,GAP_SMALL,SpringLayout.SOUTH, label_Genere);
 
         panel.add(label_nome);
@@ -286,9 +292,9 @@ public class Dashboard extends JFrame {
 
         panel.add(label_dataMorte);
         panel.add(pickerDataMorte);
-        layout.putConstraint(SpringLayout.WEST, label_dataMorte,BORDER_EXT,SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.NORTH, label_dataMorte,GAP_MID,SpringLayout.SOUTH, pickerDataNascita);
-        layout.putConstraint(SpringLayout.WEST, pickerDataMorte,BORDER_EXT,SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, label_dataMorte,GAP_MID,SpringLayout.EAST, pickerDataNascita);
+        layout.putConstraint(SpringLayout.NORTH, label_dataMorte,GAP_MID,SpringLayout.SOUTH, field_immagine);
+        layout.putConstraint(SpringLayout.WEST, pickerDataMorte,GAP_MID,SpringLayout.EAST, pickerDataNascita);
         layout.putConstraint(SpringLayout.NORTH, pickerDataMorte,GAP_SMALL,SpringLayout.SOUTH, label_dataMorte);
 
         panel.add(label_ruolo);
@@ -887,7 +893,7 @@ public class Dashboard extends JFrame {
 
         panel.add(label_dataMax);
         panel.add(pickerDataMax);
-        layout.putConstraint(SpringLayout.WEST, label_dataMax,60,SpringLayout.EAST, label_dataMin);
+        layout.putConstraint(SpringLayout.WEST, label_dataMax,100,SpringLayout.EAST, label_dataMin);
         layout.putConstraint(SpringLayout.NORTH, label_dataMax,0,SpringLayout.NORTH, label_dataMin);
         layout.putConstraint(SpringLayout.WEST, pickerDataMax,0,SpringLayout.WEST, label_dataMax);
         layout.putConstraint(SpringLayout.NORTH, pickerDataMax,GAP_SMALL,SpringLayout.SOUTH, label_dataMax);
@@ -969,7 +975,7 @@ public class Dashboard extends JFrame {
 
         panel.add(label_dataMax);
         panel.add(pickerDataMax);
-        layout.putConstraint(SpringLayout.WEST, label_dataMax,60,SpringLayout.EAST, label_dataMin);
+        layout.putConstraint(SpringLayout.WEST, label_dataMax,100,SpringLayout.EAST, label_dataMin);
         layout.putConstraint(SpringLayout.NORTH, label_dataMax,0,SpringLayout.NORTH, label_dataMin);
         layout.putConstraint(SpringLayout.WEST, pickerDataMax,0,SpringLayout.WEST, label_dataMax);
         layout.putConstraint(SpringLayout.NORTH, pickerDataMax,GAP_SMALL,SpringLayout.SOUTH, label_dataMax);
